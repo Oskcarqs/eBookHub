@@ -67,6 +67,14 @@ Create table Compra(
 		references libro(idLibro)
 );
 
+Create table Renta(
+	idRenta int auto_increment not null,
+    precioRentaDia decimal(10,2) not null,
+    fechaDeRenta date not null,
+    fechaDeVencimientoRenta date not null,
+    primary key PK_idRenta (idRenta)
+);
+
 -- Procedimientos entidad Compra
 
 /*
@@ -164,3 +172,75 @@ Delimiter ;
 			Select * from Libro where idLibro = id
         End$$
 Delimiter ;*/
+
+/*Delimiter $$
+Create procedure sp_AgregarRenta(in precioRentaDia decimal(10,2), in fechaDeRenta date, in fechaDeVencimientoRenta date)
+	Begin
+		insert into Renta (precioRentaDia, fechaDeRenta, fechaDeVencimientoRenta)
+			value (precioRentaDia, fechaDeRenta, fechaDeVencimientoRenta);
+    End$$
+Delimiter ;
+
+call sp_AgregarRenta(55.50, '2023-12-12', '2023-12-28');
+call sp_AgregarRenta(42.60, '2024-04-10', '2024-05-10');
+call sp_AgregarRenta(60.40, '2024-02-14', '2024-03-01');
+call sp_AgregarRenta(25.00, '2023-09-01', '2023-10-01');
+call sp_AgregarRenta(80.50, '2024-07-04', '2024-08-22');
+call sp_AgregarRenta(70.50, '2024-10-01', '2024-12-27');
+call sp_AgregarRenta(10.50, '2024-03-04', '2024-11-11');
+call sp_AgregarRenta(42.50, '2024-07-04', '2024-08-24');
+call sp_AgregarRenta(23.50, '2024-08-09', '2024-09-29');
+call sp_AgregarRenta(32.50, '2024-01-07', '2024-10-30');
+
+
+
+Delimiter $$
+Create procedure sp_ListarRenta()
+	Begin
+		Select
+			R.idRenta,
+            R.precioRentaDia,
+            R.fechaDeRenta,
+            R.fechaDeVencimientoRenta
+		From Renta R;
+    End$$
+Delimiter ;
+
+call sp_ListarRenta();
+
+Delimiter $$
+Create procedure sp_EliminarRenta(in idRen int)
+	Begin
+		Delete from Renta
+			where idRenta = idRen;
+	End $$
+Delimiter ;
+
+call sp_EliminarRenta(3);
+
+Delimiter $$
+Create procedure sp_BuscarRenta(in idRenta int)
+	Begin
+		Select
+			R.idRenta,
+            R.precioRentaDia,
+            R.fechaDeRenta,
+            R.fechaDeVencimientoRenta
+		From Renta R where R.idRenta = idRenta;
+    End$$
+Delimiter ;
+
+call sp_BuscarRenta(2);
+
+Delimiter $$
+Create procedure sp_EditarRenta(in idRenta int, in precioRentaDia decimal(10,2), in fechaDeRenta date, in fechaDeVencimientoRenta date)
+	Begin
+		Update Renta R 
+			set R.precioRentaDia = precioRentaDia,
+				R.fechaDeRenta = fechaDeRenta, 
+				R.fechaDeVencimientoRenta = fechaDeVencimientoRenta
+			where  R.idRenta = idRenta;
+	End $$
+Delimiter ;
+
+call sp_EditarRenta(5, 80.00, '2023-01-01', '2024-12-12');*/
