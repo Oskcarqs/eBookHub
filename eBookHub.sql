@@ -56,6 +56,90 @@ Create table Libro(
     constraint FK_Libro_Categoria foreign key (idCategoria)
 		references Categoria(idCategoria)
 );
+
+Create table Compra(
+	idCompra int auto_increment not null,
+    precioCompra decimal(10,2) not null,
+    fechaCompra date not null,
+    idLibro int not null,
+    primary key idCompra (idCompra),
+    constraint FK_idLibro_libro foreign key (idLibro)
+		references libro(idLibro)
+);
+
+-- Procedimientos entidad Compra
+
+/*
+
+Delimiter $$
+	Create procedure sp_AgregarCompra(in precioCompra decimal(10,2), in fechaCompra date, in idLibro int)
+		begin 
+			Insert into Compra(precioCompra, fechaCompra, idLibro)
+				values(precioCompra, fechaCompra, idLibro); 
+        end $$
+Delimiter ;
+
+CALL sp_AgregarCompra(5000.00, '2023-06-05', 1);
+CALL sp_AgregarCompra(3500.00, '2023-07-01', 2);
+CALL sp_AgregarCompra(8000.00, '2023-06-15', 3);
+CALL sp_AgregarCompra(2000.00, '2023-06-20', 4);
+CALL sp_AgregarCompra(6000.00, '2023-07-02', 5);
+CALL sp_AgregarCompra(4500.00, '2023-06-25', 6);
+CALL sp_AgregarCompra(7000.00, '2023-06-10', 7);
+CALL sp_AgregarCompra(3000.00, '2023-07-05', 8);
+CALL sp_AgregarCompra(5500.00, '2023-06-30', 9);
+CALL sp_AgregarCompra(4000.00, '2023-07-03', 10);
+
+Delimiter $$
+	Create procedure sp_EliminarCompra(in idCompra int) 
+		begin 
+			delete from Compra 
+				where idCompra = idCompra; 
+        end $$
+Delimiter 
+
+
+Delimiter $$
+	Create procedure sp_ListarCompra()
+	begin 
+		Select 
+			idCompra, 
+            precioCompra, 
+            fechaCompra, 
+            idLibro
+            from Compra; 
+    end $$
+Delimiter ;
+
+
+Delimiter $$
+	Create procedure sp_BuscarPresupuesto(in idCompra int)
+		Begin 
+			Select 
+				Com.idCompra, 
+				Com.precioCompra, 
+				Com.fechaCompra, 
+				Com.idLibro
+				from Compra Com where Com.idCompra = idCompra; 
+        end $$ 
+Delimiter ;
+
+
+Delimiter $$
+	Create procedure sp_EditarPresupuesto(in idCom int, in preCom decimal(10,2), in fechaCom date, in idLib int)
+		begin 
+			  Update Compra
+					set
+                    precioCompra = preCom,
+                    fechaCompra = fechaCom,
+                    idLibro = idLib
+                    where Pre.codigoPresupuesto = codPres;
+                    
+        end $$
+Delimiter ;
+
+*/
+
 /*
 -- Procedimientos Almacenados de la Entidad Libros --
 Delimiter $$
