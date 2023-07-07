@@ -128,6 +128,18 @@ create table Suscripcion(
     foreign key (idUsuario) references Usuario(idUsuario)
 );
 
+create table Usuario(
+	idUsuario int not null auto_increment,
+    nickNameUsuario varchar(50) not null,
+    emailUsuario varchar(70) not null,
+    passwordUsuario varchar(50) not null,
+    idCliente int not null,
+    primary key PK_idUsuario(idUsuario),
+    constraint FK_Usuario_idCliente foreign key(idCliente)
+		references Cliente(idCliente)
+);
+
+
 
 -- Procedimientos entidad Compra
 
@@ -566,4 +578,21 @@ Delimiter ;
 
 call sp_EditarCliente(1 ,'medina', 'pedro', '2023-06-11', 'villa nueva', '12345678');
 
+
+Delimiter $$
+	create procedure sp_AgregarUsuario(in idUsuario int, in nickNameUsuario varchar(50), in emailUsuario varchar(70), in passwordUsuario varchar(50), in idCliente int)
+		begin
+			insert into Usuario(idUsuario, nickNameUsuario, emailUsuario, passwordUsuario, idCliente)
+				values (idUsuario, nickNameUsuario, emailUsuario, passwordUsuario, idCliente);
+        end$$
+Delimiter ;
+
+call sp_AgregarUsuario('987654','Alice','alice@gmail.com','p@ssw0rd','54321');
+call sp_AgregarUsuario('456123','Bob','bob@gmail.com','512412faaw','67890');
+call sp_AgregarUsuario('789012','eveeee','eve@gmail.com','31afwl','13579');
+call sp_AgregarUsuario('123456', 'John', 'john@gmail.com', 'password123', '98765');
+call sp_AgregarUsuario('789012', 'Sarah', 'sarah@gmail.com', 'secretpass', '54321');
+call sp_AgregarUsuario('345678', 'Michael', 'michael@gmail.com', 'mypass123', '24680');
+call sp_AgregarUsuario('901234', 'Emily', 'emily@gmail.com', 'pass1234', '13579');
+call sp_AgregarUsuario('567890', 'David', 'david@gmail.com', 'qwerty', '86420');
 */
