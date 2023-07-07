@@ -1,3 +1,12 @@
+/*
+
+Grupo 2
+Código Técnico: IN5BM
+Fecha de Inicio: 05/07/2023
+Fecha de Modificación: 06/07/2023
+
+*/
+
 Drop database if exists eBookHub;
 Create database eBookHub;
 
@@ -86,6 +95,7 @@ constraint FK_DetalleFactura_Renta foreign key
 );
 
 Create table Factura (
+
 	idFactura int not null auto_increment,
     fechaDeEmision date not null,
     totalFactura decimal(10,2) not null,
@@ -139,7 +149,7 @@ create table Usuario(
 		references Cliente(idCliente)
 );
 
-Create Table Sucursal(
+Create table Sucursal(
 	idSucursal int not null auto_increment,
 	nombreSucursal varchar(35) not null, 
 	direccionSucursal varchar(75) not null,
@@ -148,6 +158,16 @@ Create Table Sucursal(
 	primary key PK_idSucursal (idSucursal)
 );
 
+Create table Empleado(
+	
+	idEmpleado int auto_increment not null,
+    nombreEmpleado varchar(35) not null,
+    apellidoEmpleado varchar(35) not null,
+    puestoEmpleado varchar(35),
+    idSucursal int not null,
+    primary key PK_idEmpleado (idEmpleado)
+
+);
 
 -- Procedimientos entidad Compra
 
@@ -604,7 +624,7 @@ call sp_AgregarUsuario('345678', 'Michael', 'michael@gmail.com', 'mypass123', '2
 call sp_AgregarUsuario('901234', 'Emily', 'emily@gmail.com', 'pass1234', '13579');
 call sp_AgregarUsuario('567890', 'David', 'david@gmail.com', 'qwerty', '86420');
 
--------------------- SP Entidad Sucursal -------------------
+-- ------------------ SP Entidad Sucursal -------------------
 
 -- Agregar Sucursales---
 
@@ -675,4 +695,76 @@ Delimiter $$
 				where idSucursal = idSuc;
         End $$
 Delimiter ; 
+
+-- ------------------ SP Entidad Empleado -------------------
+
+Delimiter $$
+	Create procedure sp_AgregarEmpleado(in nombreEmpleado int, in apellidoEmpleado varchar(35), in puestoEmpleado varchar(35), in idSucursal int)
+		Begin
+			Insert into Empleado(nombreEmpleado, apellidoEmpleado, puestoEmpleado, idSucursal)
+				values(nombreEmpleado, apellidoEmpleado, puestoEmpleado, idSucursal);
+        End$$
+Delimiter ;
+
+call sp_AgregarEmpleado("Pedro Ezequiel", "Osorio Hernandez", "Gerente General", 1);
+call sp_AgregarEmpleado("Juan Felipe", "Lemus Castañeda", "SubGerente", 2);
+call sp_AgregarEmpleado("Maria Ester", "Perez Istacuy", "Servicio al cliente", 3);
+call sp_AgregarEmpleado("Pedro Ezequiel", "Osorio Hernandez", "Recursos", 4);
+call sp_AgregarEmpleado("Otto Samuel", "Enriquez Bolaños", "Programador Front-End", 5);
+call sp_AgregarEmpleado("Brandon Esmeralda", "Morales Ramirez", "Programador Back-End", 6);
+call sp_AgregarEmpleado("Toto Valentin", "Menendez Estrada", "Marketing", 7);
+call sp_AgregarEmpleado("Francesca Elizabeth", "Salvaroti Velazquez", "Contabilidad", 8);
+call sp_AgregarEmpleado("Luisa Fernanda", "Santos Osorio", "Mantenimiento", 9);
+call sp_AgregarEmpleado("Jorge Samuel", "Perez Molina", "Project Manager", 10);
+
+Delimiter $$
+	Create procedure sp_ListarEmpleados()
+		Begin
+			Select 
+				EM.idEmpleado,
+                EM.nombreEmpleado,
+                EM.apellidoEmpleado,
+                EM.puestoEmpleado,
+                EM.idSucursal
+				from Empleado EM;
+        End$$
+Delimiter ;
+
+call sp_ListarEmpleados();
+
+Delimiter $$
+	Create procedure sp_BuscarEmpleado(in id_Empleado int)
+		Begin
+			Select 
+				EM.idEmpleado,
+                EM.nombreEmpleado,
+                EM.apellidoEmpleado,
+                EM.puestoEmpleado,
+                EM.idSucursal
+				from Empleado EM
+					where EM.idEmpleado = id_Empleado;
+        End$$
+Delimiter ;
+
+call sp_BuscarEmpleado(4);
+
+Delimiter $$
+	Create procedure sp_EditarEmpleado(in id_Empleado int ,in nombre_Empleado int, in apellido_Empleado varchar(35), in puesto_Empleado varchar(35), in id_Sucursal int)
+		Begin
+			Update Empleado EM
+				set EM.nombreEmpleado = nombre_Empleado, EM.apellidoEmpleado = apellido_Empleado, EM.puestoEmpleado = puesto_Empleado, EM.idSucursal = id_Sucursal
+					where EM.idEmpleado = id_Empleado;
+        End$$
+Delimiter ;
+
+call sp_EditarEmpleado(7, "Victor", "Alvarez", "Marketing", 7);
+
+Delimiter $$
+	Create procedure sp_EliminarEmpleado(in id_Empleado int)
+		Begin
+			Delete from Empleado
+				where idEmpleado = id_Empleado;
+        End$$
+Delimiter ;
+-- call sp_EliminarEmpleado(9);
 */
