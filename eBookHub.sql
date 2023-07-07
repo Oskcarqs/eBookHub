@@ -75,6 +75,17 @@ Create table Renta(
     primary key PK_idRenta (idRenta)
 );
 
+create table DetalleFactura(
+idDetalleFactura int not null auto_increment primary key,
+idCompra int,
+idRenta int,
+constraint FK_DetalleFactura_Compra foreign key
+	(idCompra) references Compra(idCompra) on delete cascade,
+constraint FK_DetalleFactura_Renta foreign key
+	(idRenta) references Renta(idRenta) on delete cascade
+);
+
+
 -- Procedimientos entidad Compra
 
 /*
@@ -243,4 +254,70 @@ Create procedure sp_EditarRenta(in idRenta int, in precioRentaDia decimal(10,2),
 	End $$
 Delimiter ;
 
-call sp_EditarRenta(5, 80.00, '2023-01-01', '2024-12-12');*/
+call sp_EditarRenta(5, 80.00, '2023-01-01', '2024-12-12');
+
+-- -------------------------------- Agregar DetalleFactura --------------------------------
+delimiter $$
+	create procedure sp_AgregarDetalleFactura(in idCompra int, in idRenta int)
+		begin
+			insert into DetalleFactura (idCompra, idRenta)
+				values(idCompra, idRenta);
+        end $$
+delimiter ;
+
+-- -------------------------------- Listar DetalleFactura --------------------------------
+delimiter $$
+	create procedure sp_ListarDetalleFactura()
+		begin
+			select
+				df.idDetalleFactura,
+                df.idCompra,
+                df.idRenta
+			from DetalleFactura df;
+        end $$
+delimiter ;
+
+-- -------------------------------- Buscar DetalleFactura --------------------------------
+delimiter $$
+	create procedure sp_BuscarDetalleFactura(in codigoDetalleFactura int)
+		begin
+			select
+				df.idDetalleFactura,
+                df.idCompra,
+                df.idRenta
+			from DetalleFactura df where df.idDetalleFactura = codigoDetalleFactura;        
+        end $$
+delimiter ;
+
+-- -------------------------------- Eliminar DetalleFactura --------------------------------
+delimiter $$
+		create procedure sp_EliminarDetalleFactura(in codigoDetalleFactura int)
+		begin	
+			delete from DetalleFactura df where df.idDetalleFactura = codigoDetalleFactura; 
+        end $$
+delimiter ; 
+
+-- -------------------------------- Editar DetalleFactura --------------------------------
+delimiter $$
+	create procedure sp_EditarDetalleFactura(in codigoDetalleFactura int, in codCompra int, in codRenta int)
+		begin
+			Update DetalleFactura df
+				set 
+					df.idCompra = codCompra, 
+					df.idRenta = codRenta
+					where df.idDetalleFactura = codigoDetalleFactura; 				
+        end $$
+delimiter ;
+
+
+call sp_AgregarDetalleFactura(1,1);
+call sp_AgregarDetalleFactura(2, 2);
+call sp_ListarDetalleFactura();
+call sp_BuscarDetalleFactura(2);
+call sp_EliminarDetalleFactura(1);
+call sp_EditarDetalleFactura(2, 3, 3);
+
+
+
+
+*/
