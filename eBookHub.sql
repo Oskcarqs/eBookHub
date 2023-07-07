@@ -139,6 +139,14 @@ create table Usuario(
 		references Cliente(idCliente)
 );
 
+Create Table Sucursal(
+	idSucursal int not null auto_increment,
+	nombreSucursal varchar(35) not null, 
+	direccionSucursal varchar(75) not null,
+	telefonoSucursal varchar(10) not null,
+
+	primary key PK_idSucursal (idSucursal)
+);
 
 
 -- Procedimientos entidad Compra
@@ -595,4 +603,76 @@ call sp_AgregarUsuario('789012', 'Sarah', 'sarah@gmail.com', 'secretpass', '5432
 call sp_AgregarUsuario('345678', 'Michael', 'michael@gmail.com', 'mypass123', '24680');
 call sp_AgregarUsuario('901234', 'Emily', 'emily@gmail.com', 'pass1234', '13579');
 call sp_AgregarUsuario('567890', 'David', 'david@gmail.com', 'qwerty', '86420');
+
+-------------------- SP Entidad Sucursal -------------------
+
+-- Agregar Sucursales---
+
+Delimiter $$
+	Create procedure sp_AgregarSucursales(in nombreSucursal varchar(35), in direccionSucursal varchar(75), in telefonoSucursal varchar(10))
+		Begin
+			Insert into Sucursal (nombreSucursal, direccionSucursal, telefonoSucursal)
+				values (nombreSucursal, direccionSucursal, telefonoSucursal)
+        End $$
+Delimiter ; 
+
+call sp_AgregarSucursal('Edificio Luna', '8va Av. 9-96 z.21', '6452-1325');
+call sp_AgregarSucursal('Edificio Sol', '9na Calle 5-52 z.11', '65845211');
+call sp_AgregarSucursal('Edificio Cero', 'Las Carchas, z.11', '2424-2424');
+call sp_AgregarSucursal('Edificio Pi', 'Condado Ricinos z.14', '1234-5678');
+call sp_AgregarSucursal('Edificio Pablo Neruda', '8va Calle 9-63 Col. Jardines Oscuros z.13', '7410-2589');
+call sp_AgregarSucursal('Edificio Gabriel Garcia Márquez', 'Condado Las Buganvilias Z.1', '4656-4512');
+call sp_AgregarSucursal('Edificio Julio Verne', '8va Av. 12-42 Villa Las Flores z.2', '2475-0122');
+call sp_AgregarSucursal('Edificio Miguel Angel Asturias', 'Avenida de los Álamos 8-90, Zona 16, Villa Nueva', '5274-8016');
+call sp_AgregarSucursal('Edificio Ricardo Arjona', 'Calle del Sol 23-67, Zona 10, Mixco', '5368-4207');
+call sp_AgregarSucursal('Edificio Erick Barrondo ', '7a Avenida 15-45, Zona 4, Ciudad de Guatemala', '2541-9990');
+
+-- Listar Sucursales---
+
+Delimiter $$
+	Create procedure sp_ListarSucursales()
+		Begin
+			Select * from Sucursal;
+        End $$
+Delimiter ; 
+
+call sp_ListarSucursales();
+
+-- Buscar Sucursales---
+
+Delimiter $$
+	Create procedure sp_BuscarSucursales(in idSuc int)
+		Begin
+			Select * from Sucursal
+				where idSucursal = idSuc;
+        End $$
+Delimiter ; 
+
+call sp_BuscarSucursales(1);
+call sp_BuscarSucursales(2);
+call sp_BuscarSucursales(3);
+
+-- Actualizar Sucursales---
+
+Delimiter $$
+	Create procedure sp_ActualizarSucursales(in idSucursal int, in nomSuc varchar(35), in dirSuc varchar(75), in telSuc varchar(10))
+		Begin
+			Update Sucursal
+				set nombreSucursal = nomSuc,
+					direccionSucursal = dirSuc,
+					telefonoSucursal = telSuc
+			where idSucursal = idSuc;
+        End $$
+Delimiter ; 
+
+
+-- Eliminar Sucursales---
+
+Delimiter $$
+	Create procedure sp_EliminarSucursales(in idSuc int)
+		Begin
+			Delete from Sucursal
+				where idSucursal = idSuc;
+        End $$
+Delimiter ; 
 */
