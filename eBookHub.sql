@@ -85,6 +85,23 @@ constraint FK_DetalleFactura_Renta foreign key
 	(idRenta) references Renta(idRenta) on delete cascade
 );
 
+Create table Factura (
+	idFactura int not null auto_increment,
+    fechaDeEmision date not null,
+    totalFactura decimal(10,2) not null,
+	idUsuario int not null,
+    idDetalleFactura int not null,
+    
+    primary key PK_idFactura (idFactura),
+    
+    constraint FK_Factura_Usuario foreign key (idUsuario)
+		references Usuario (idUsuario),
+        
+	constraint FK_Factura_detalleFactura foreign key (idDetalleFactura)
+		references detalleFactura (idDetalleFactura)
+);
+
+
 
 -- Procedimientos entidad Compra
 
@@ -317,7 +334,80 @@ call sp_BuscarDetalleFactura(2);
 call sp_EliminarDetalleFactura(1);
 call sp_EditarDetalleFactura(2, 3, 3);
 
+-- -------------------------------- Agregar Factura --------------------------------
+Delimiter $$
+	Create procedure sp_AgregarFactura(in fechaDeEmision date, in totalFactura decimal(10,2), in idUsuario int, in idDetalleFactura int)
+		Begin
+			Insert into Factura (fechaDeEmision, totalFactura, idUsuario, idDetalleFactura)
+				values (fechaDeEmision, totalFactura, idUsuario, idDetalleFactura);
+        End $$
+Delimiter ; 
 
+call sp_AgregarFactura('2023-01-03', 400.30, 1, 1);
+call sp_AgregarFactura('2023-02-04', 100.50, 2, 2);
+call sp_AgregarFactura('2023-03-05', 200.00, 3, 3);
+call sp_AgregarFactura('2020-04-05', 700.10, 4, 4);
+call sp_AgregarFactura('2023-05-05', 500.10, 5, 5);
+call sp_AgregarFactura('2023-06-05', 300.10, 6, 6);
+call sp_AgregarFactura('2021-07-05', 800.60, 7, 7);
+call sp_AgregarFactura('2019-08-05', 600.70, 8, 8);
+call sp_AgregarFactura('2021-09-05', 500.90, 9, 9);
 
+-- -------------------------------- Listar Factura --------------------------------
+
+Delimiter $$
+	Create procedure sp_ListarFactura()
+		Begin
+			Select * from Factura;
+        End $$
+Delimiter ; 
+
+call sp_ListarFactura();
+
+-- -------------------------------- Buscar Factura --------------------------------
+
+Delimiter $$
+	Create procedure sp_BuscarFactura(in idFactura int)
+		Begin
+			Select * from Factura
+				where idFactura = idFactura;
+        End $$
+Delimiter ; 
+
+call sp_BuscarFactura(1);
+call sp_BuscarFactura(2);
+call sp_BuscarFactura(3);
+call sp_BuscarFactura(4);
+call sp_BuscarFactura(5);
+call sp_BuscarFactura(6);
+call sp_BuscarFactura(7);
+call sp_BuscarFactura(8);
+call sp_BuscarFactura(9);
+
+-- -------------------------------- Eliminar Factura --------------------------------
+
+Delimiter $$
+	Create procedure sp_EliminarFactura(in idFactura int)
+		Begin
+			Delete from Factura
+				where idFactura= idFactura;
+        End $$
+Delimiter ; 
+
+call sp_EliminarFactura(1);
+
+-- -------------------------------- Editar Factura --------------------------------
+
+Delimiter $$
+	Create procedure sp_EditarFactura(in fechaDeEmision date, in totalFactura decimal(10,2), in idUsuario int, in idDetalleFactura int)
+		Begin
+			Update Factura
+				set fechaDeEmision = fechaDeEmision,
+					totalFactura = totalFactura,
+					idUsuario = idUsuario,
+                    idDetalleFactura = idDetalleFactura
+			where idFactura = idFactura;
+        End $$
+Delimiter ;
 
 */
