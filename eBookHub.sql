@@ -107,6 +107,15 @@ Create table TipoSuscripcion(
     precioTipoSuscripcion decimal(10,2) not null
 );
 
+create table Cliente (
+	idCliente int not null auto_increment,
+    nombreCliente varchar(35),
+    apellidoCliente varchar(35),
+    fechaDeNacimientoCliente date,
+    direccionCliente varchar(75),
+    telefonoCliente varchar(10),
+    primary key PK_idCliente (idCliente)
+);
 
 -- Procedimientos entidad Compra
 
@@ -470,4 +479,79 @@ Delimiter $$
 				where idTipoSuscripcion = idTpSuscrip;
         End$$
 Delimiter ;
+
+Delimiter $$
+	Create procedure sp_AgregarCliente( in nombreCliente varchar(35), in apellidoCliente varchar(35), in fechaDeNacimientoCliente date, in direccionCliente varchar(75), telefonoCliente varchar(10))
+		begin 
+			insert into Cliente (nombreCliente, apellidoCliente, fechaDeNacimientoCliente, direccionCliente, telefonoCliente)
+			value (nombreCliente, apellidoCliente, fechaDeNacimientoCliente, direccionCliente, telefonoCliente);
+		End$$
+Delimiter ;
+
+call sp_AgregarCliente('pedro', 'medina', '2023-06-11', 'villa nueva', '12345678');
+call sp_AgregarCliente('emilio', 'de paz', '2021-01-12', 'villa canales', '12345671');
+call sp_AgregarCliente('isabel', 'gordillo', '2022-02-13', 'mixco', '12345672');
+call sp_AgregarCliente('fabian', 'medina', '2023-03-14', 'san miguel petapa', '12345673');
+call sp_AgregarCliente('enrique', 'de paz', '2024-04-15', 'cuidad del sol', '12345674');
+call sp_AgregarCliente('pedro', 'lopez', '2025-05-16', 'la betania', '12345675');
+call sp_AgregarCliente('santiago', 'maeda', '2026-07-17', 'zona 18', '12345676');
+call sp_AgregarCliente('oscar', 'morales', '2027-08-18', 'colonia landivar', '12345677');
+call sp_AgregarCliente('otto', 'menendez', '2028-09-19', 'amatitlan', '12345671');
+call sp_AgregarCliente('angel', 'mendez', '2029-10-10', 'escuintla', '123456710');
+
+Delimiter $$
+	Create procedure sp_ListarCliente ()
+		Begin
+			Select 	
+            C.nombreCliente,
+            C.apellidoCliente,
+			C.fechaDeNacimientoCliente,
+            C.direccionCliente,
+            C.telefonoCliente
+            From Cliente C;
+        End$$
+Delimiter ;
+	
+Call sp_ListarCliente();
+
+Delimiter $$
+	Create procedure sp_BuscarCliente (in idCli int)
+		Begin
+			Select 
+            C.nombreCliente,
+            C.apellidoCliente,
+			C.fechaDeNacimientoCliente,
+            C.direccionCliente,
+            C.telefonoCliente
+            From Cliente C where idCliente = idCli;
+        End$$
+Delimiter ;
+
+Call sp_BuscarCliente (1);
+
+Delimiter $$
+	Create procedure sp_EliminarCliente (in idCli int)
+		Begin
+			Delete from Cliente
+					where idCliente = idCli;
+        End$$
+Delimiter ;
+
+-- call sp_EliminarCliente(1);
+
+Delimiter $$
+	Create procedure sp_EditarCliente (in idCli int, in nomCli varchar(35), in apeCli varchar(35), in fecha date, in dir varchar(75), tel varchar(10))
+		Begin
+			Update Cliente C
+				Set C.nombreCliente = nomCli,
+					C.apellidoCliente = apeCli,
+                    C.fechaDeNacimientoCliente = fecha,
+                    C.direccionCliente = dir,
+                    C.telefonoCliente = tel
+                    where C.idCliente = idCli;
+        End$$
+Delimiter ;
+
+call sp_EditarCliente(1 ,'medina', 'pedro', '2023-06-11', 'villa nueva', '12345678');
+
 */
