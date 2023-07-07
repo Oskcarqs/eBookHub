@@ -63,8 +63,8 @@ Create table Compra(
     fechaCompra date not null,
     idLibro int not null,
     primary key idCompra (idCompra),
-    constraint FK_idLibro_libro foreign key (idLibro)
-		references libro(idLibro)
+    constraint FK_Compra_Libro foreign key (idLibro)
+		references Libro(idLibro)
 );
 
 Create table Renta(
