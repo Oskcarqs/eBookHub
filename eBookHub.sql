@@ -100,7 +100,12 @@ Create table Factura (
 	constraint FK_Factura_detalleFactura foreign key (idDetalleFactura)
 		references detalleFactura (idDetalleFactura)
 );
-
+Create table TipoSuscripcion(
+	idTipoSuscripcion int auto_increment primary key,
+    nombreTipoSuscripcion varchar(35) not null,
+    descripcionTipoSuscripcion varchar(250) not null,
+    precioTipoSuscripcion decimal(10,2) not null
+);
 
 
 -- Procedimientos entidad Compra
@@ -409,5 +414,60 @@ Delimiter $$
 			where idFactura = idFactura;
         End $$
 Delimiter ;
+-- -------------------- Agregar Tipo Suscripcion -------------------------------------
+Delimiter $$
+	Create procedure sp_AgregarTipoSuscripcion(in nombreTipoSuscripcion varchar(35), in descripcionTipoSuscripcion varchar(250), in precioTipoSuscripcion decimal(10,2))
+    Begin
+		insert into  TipoSuscripcion(nombreTipoSuscripcion,descripcionTipoSuscripcion,precioTipoSuscripcion)
+		values (nombreTipoSuscripcion,descripcionTipoSuscripcion,precioTipoSuscripcion);
+	end$$
+Delimiter ;
+call sp_AgregarTipoSuscripcion("Básica", "Suscripción básica con acceso limitado", 9.99);
+call sp_AgregarTipoSuscripcion("Premium", "Suscripción premium con acceso completo", 19.99);
+call sp_AgregarTipoSuscripcion("Familiar", "Suscripción para familias con múltiples usuarios", 14.99);
+call sp_AgregarTipoSuscripcion("Estudiante", "Suscripción especial para estudiantes", 6.99);
+call sp_AgregarTipoSuscripcion("Empresarial", "Suscripción para empresas con características adicionales", 29.99);
 
+-- -------------------- Listar Tipo Suscripcion -------------------------------------
+Delimiter $$
+	Create procedure  sp_ListarTipoSuscripcion()
+		Begin
+			select
+				TS.idTipoSuscripcion,
+				TS.nombreTipoSuscripcion,
+				TS.descripcionTipoSuscripcion,
+				TS.precioTipoSuscripcion
+				From TipoSuscripcion TS;
+        End$$
+Delimiter ;
+-- -------------------- Buscar Tipo Suscripcion -------------------------------------
+Delimiter $$
+	Create procedure sp_BuscarTipoSuscripcion(in idTipSuscrip int)
+		Begin
+			select
+				TS.idTipoSuscripcion,
+				TS.nombreTipoSuscripcion,
+				TS.descripcionTipoSuscripcion,
+				TS.precioTipoSuscripcion
+				From TipoSuscripcion TS where TS.idTipoSuscripcion = idTipSuscrip ;
+        End$$
+Delimiter ;
+-- -------------------- Eliminar Tipo Suscripcion -------------------------------------
+Delimiter $$
+	Create procedure sp_EliminarTipoSuscripcion(in idTipSuscrip int)
+		Begin 
+			Delete from TipoSuscripcion
+				where idTipoSuscripcion = idTipSuscrip;
+
+		End$$
+Delimiter ;
+-- -------------------- editar tipo Suscripcion -------------------------------------
+Delimiter $$
+	Create procedure sp_EditarTipoSuscripcion(in idTpSuscrip int, in nTpSuscrip varchar(35), in descripTpSuscrip varchar(250), in precioTpSuscrip decimal(10,2))
+		Begin
+			update TipoSuscripcion TS
+				set  TS.nombreTipoSuscripcion=nTpSuscrip, TS.descripcionTipoSuscripcion=descripTpSuscrip, TS.precioTipoSuscripcion=precioTpSuscrip 
+				where idTipoSuscripcion = idTpSuscrip;
+        End$$
+Delimiter ;
 */
