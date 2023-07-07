@@ -117,6 +117,18 @@ create table Cliente (
     primary key PK_idCliente (idCliente)
 );
 
+create table Suscripcion(
+	idsuscripcion int not null auto_increment primary key,
+	idTipoSuscripcion int null null,
+    idUsuario int not null,
+    fechaDeInicio date not null,
+	fechaDeVencimiento date not null,
+    primary key PK_idsuscripcion (idsuscripcion),
+    foreign key (idTipoConstrucion) references TipoSuscripcion(idTipoSuscripcion),
+    foreign key (idUsuario) references Usuario(idUsuario)
+);
+
+
 -- Procedimientos entidad Compra
 
 /*
