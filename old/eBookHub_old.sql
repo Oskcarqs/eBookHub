@@ -37,7 +37,7 @@ Create table Autor (
     nombreAutor varchar(35) not null,
     apellidoAutor varchar(35) not null,
     nacionalidadAutor varchar(35) not null,
-    fechaNacimientoAutor date not null,
+    fechaDeNacimientoAutor date not null,
     biografiaAutor varchar(250) not null,
     primary key PK_idAutor (idAutor)
 );
@@ -56,7 +56,7 @@ Create table Categoria (
 	primary key PK_idCategoria (idCategoria)
 );
 
--- Zendher Ottoniel --
+-- Zendez Ottoniel --
 Create table Libro ( 
 	idLibro int not null auto_increment,
 	tituloLibro varchar(100) not null,
@@ -64,7 +64,6 @@ Create table Libro (
     fechaDePublicacion date not null,
     idiomaLibro varchar(30) not null,
     costoLibro decimal(10,2) not null,
-    stockLibro int not null,
     idTipoLibro int not null,
     idAutor int not null,
     idEditorial int not null,
@@ -78,6 +77,26 @@ Create table Libro (
 		references Editorial (idEditorial),
 	constraint FK_Libro_Categoria foreign key (idCategoria)
 		references Categoria (idCategoria)
+);
+
+-- Héctor Rodriguez --
+Create table Compra(
+	idCompra int not null auto_increment,
+    precioCompra decimal(10,2) not null,
+    fechaCompra date not null,
+    idLibro int not null,
+    primary key idCompra (idCompra),
+    constraint FK_Compra_Libro foreign key (idLibro)
+		references Libro (idLibro)  on delete cascade
+);
+
+-- Angel Méndez -- 
+Create table Renta(
+	idRenta int not null auto_increment,
+    precioRentaDia decimal(10,2) not null,
+    fechaDeRenta date not null,
+    fechaDeVencimientoRenta date not null,
+    primary key PK_idRenta (idRenta)
 );
 
 -- Pedro Medina --
@@ -103,62 +122,30 @@ create table Usuario(
 		references Cliente (idCliente)  on delete cascade
 );
 
-Create table TipoServicio (
-	idTipoServicio int not null auto_increment,
-    nombreTipoServicio varchar(35) not null,
-    primary key PK_idTipoServicio (idTipoServicio)
-);
-
-Create table Servicio (
-	idServicio int not null auto_increment,
-    costoServicio decimal(10,2) not null,
-    fechaServicio date not null,
-    fechaVencimientoServicio date,
-    idTipoServicio int not null,
-    idLibro int not null,
-    idUsuario int not null,    
-    primary key PK_idServicio (idServicio),
-    constraint FK_Servicio_TipoServicio foreign key (idTipoServicio)
-		references TipoServicio (idTipoServicio),
-    constraint FK_Servicio_Libro foreign key (idLibro)
-		references Libro (idLibro),
-	constraint FK_Servicio_Usuario foreign key (idUsuario)
-		references Usuario (idUsuario)
-);
-
--- Edson Pereira --
-Create table Sucursal(
-	idSucursal int not null auto_increment,
-	nombreSucursal varchar(35) not null, 
-	direccionSucursal varchar(75) not null,
-	telefonoSucursal varchar(10) not null,
-	primary key PK_idSucursal (idSucursal)
+-- Kaled rodriguez -- 
+create table DetalleFactura(
+	idDetalleFactura int not null auto_increment,
+	idCompra int,
+	idRenta int,
+    primary key PK_idDetalleFactura (idDetalleFactura),
+	constraint FK_DetalleFactura_Compra foreign key (idCompra) 
+        references Compra(idCompra) on delete cascade ,
+	constraint FK_DetalleFactura_Renta foreign key (idRenta) 
+		references Renta(idRenta) on delete cascade
 );
 
 -- Evan Ramirez -- 
 Create table Factura (
 	idFactura int not null auto_increment,
-    fechaEmision date not null,
-    horaEmision time not null,
+    fechaDeEmision date not null,
     totalFactura decimal(10,2) not null,
-    idSucursal int not null,
-    idUsuario int not null,
-    primary key PK_idFactura (idFactura),    
-    constraint FK_Factura_Sucursal foreign key (idSucursal)
-		references Sucursal (idSucursal)  on delete cascade,      
-	constraint FK_Factura_Usuario foreign key (idUsuario)
-		references Usuario (idUsuario) on delete cascade
-);
-
-Create table DetalleFactura (
-	idDetalleFactura int not null auto_increment,
-    idFactura int not null,
-    idServicio int not null,
-    primary key PK_idDetalleFactura (idDetalleFactura),
-    constraint FK_DetalleFactura_Factura foreign key (idFactura)
-		references Factura (idFactura) on delete cascade,
-	constraint FK_DetalleFactura_Servicio foreign key (idServicio)
-		references Servicio (idServicio) on delete cascade
+	idUsuario int not null,
+    idDetalleFactura int not null,
+    primary key PK_idFactura (idFactura),
+    constraint FK_Factura_Usuario foreign key (idUsuario)
+		references Usuario (idUsuario)  on delete cascade,
+	constraint FK_Factura_DetalleFactura foreign key (idDetalleFactura)
+		references DetalleFactura (idDetalleFactura)  on delete cascade
 );
 
 -- Brandon Mendoza -- 
@@ -171,31 +158,36 @@ Create table TipoSuscripcion(
 );
 
 -- Derick Sanchez --
-Create table FacturaSuscripcion(
-	idFacturaSuscripcion int not null auto_increment,
+Create table Suscripcion(
+	idSuscripcion int not null auto_increment,
     fechaDeInicio date not null,
 	fechaDeVencimiento date not null,
 	idTipoSuscripcion int null null,
     idUsuario int not null,
-    primary key PK_idFacturasuscripcion (idFacturasuscripcion),
+    primary key PK_idsuscripcion (idsuscripcion),
     constraint FK_Suscripcion_TipoSuscripcion foreign key (idTipoSuscripcion) 
 		references TipoSuscripcion (idTipoSuscripcion)  on delete cascade,
     constraint FK_Suscripcion_Usuario foreign key (idUsuario) 
 		references Usuario (idUsuario)  on delete cascade
 );
 
-;
+-- Edson Pereira --
+Create table Sucursal(
+	idSucursal int not null auto_increment,
+	nombreSucursal varchar(35) not null, 
+	direccionSucursal varchar(75) not null,
+	telefonoSucursal varchar(10) not null,
+	primary key PK_idSucursal (idSucursal)
+);
 
 -- Jorge Revolorio -- 
 Create table Empleado(
 	idEmpleado int auto_increment not null,
     nombreEmpleado varchar(35) not null,
     apellidoEmpleado varchar(35) not null,
-    puestoEmpleado varchar(35) not null,
+    puestoEmpleado varchar(35),
     idSucursal int not null,
-    primary key PK_idEmpleado (idEmpleado),
-    constraint FK_Empleado_Sucursal foreign key (idSucursal)
-		references Sucursal (idSucursal)
+    primary key PK_idEmpleado (idEmpleado)
 );
 
 
@@ -272,10 +264,10 @@ call sp_BuscarTipoLibro(1);
 /* ENTIDAD AUTOR */
 -- Agregar AUTOR --
 Delimiter $$
-	Create procedure sp_AgregarAutor(in nombreAutor varchar(35), in apellidoAutor varchar(35), in nacionalidadAutor varchar(35), in fechaNacimientoAutor date, in biografiaAutor varchar(250))
+	Create procedure sp_AgregarAutor(in nombreAutor varchar(35), in apellidoAutor varchar(35), in nacionalidadAutor varchar(35), in fechaDeNacimientoAutor date, in biografiaAutor varchar(250))
 		Begin
-			Insert into Autor(nombreAutor, apellidoAutor, nacionalidadAutor, fechaNacimientoAutor, biografiaAutor)
-				values (nombreAutor, apellidoAutor, nacionalidadAutor, fechaNacimientoAutor, biografiaAutor);
+			Insert into Autor(nombreAutor, apellidoAutor, nacionalidadAutor, fechaDeNacimientoAutor, biografiaAutor)
+				values (nombreAutor, apellidoAutor, nacionalidadAutor, fechaDeNacimientoAutor, biografiaAutor);
         End $$
 Delimiter ;
 
@@ -299,7 +291,7 @@ Delimiter $$
                 a.nombreAutor, 
                 a.apellidoAutor, 
                 a.nacionalidadAutor, 
-                a.fechaNacimientoAutor, 
+                a.fechaDeNacimientoAutor, 
                 a.biografiaAutor
 			from Autor a;
         end $$
@@ -315,7 +307,7 @@ Delimiter $$
 				set a.nombreAutor = nombreAut,
 					a.apellidoAutor = apellidoAut,
                     a.nacionalidadAutor = nacdAut,
-					a.fechaNacimientoAutor = fechaDeNacAut,
+					a.fechaDeNacimientoAutor = fechaDeNacAut,
                     a.biografiaAutor = bioAut
 				where a.idAutor = idAut;
         end $$
@@ -344,7 +336,7 @@ Delimiter $$
                 a.nombreAutor, 
                 a.apellidoAutor, 
                 a.nacionalidadAutor, 
-                a.fechaNacimientoAutor, 
+                a.fechaDeNacimientoAutor, 
                 a.biografiaAutor
 			from Autor a
 				where idAutor = idAut;
@@ -513,33 +505,33 @@ call sp_BuscarCategoria(3);
 -- Agregar libro --
 Delimiter $$
 	Create procedure sp_AgregarLibro(in tituloLibro varchar(100), in descripcionLibro varchar(250), in fechaDePublicacion date,
-									 in idiomaLibro varchar(30), in costoLibro decimal(10,2), in stockLibro int, in idTipoLibro int, in idAutor int, in idEditorial int, in idCategoria  int)
+									 in idiomaLibro varchar(30), in costoLibro decimal(10,2), in idTipoLibro int, in idAutor int, in idEditorial int, in idCategoria  int)
 		Begin
-			insert into Libro (tituloLibro, descripcionLibro, fechaDePublicacion, idiomaLibro, costoLibro, stockLibro, idTipoLibro, idAutor, idEditorial, idCategoria)
-					values (tituloLibro, descripcionLibro, fechaDePublicacion, idiomaLibro, costoLibro, stockLibro, idTipoLibro, idAutor,idEditorial, idCategoria);
+			insert into Libro (tituloLibro, descripcionLibro, fechaDePublicacion, idiomaLibro, costoLibro, idTipoLibro, idAutor, idEditorial, idCategoria)
+					values (tituloLibro, descripcionLibro, fechaDePublicacion, idiomaLibro, costoLibro, idTipoLibro, idAutor,idEditorial, idCategoria);
 		end $$
 Delimiter ;
 
 call sp_AgregarLibro('Rimas y Leyendas', ' Una recopilación de poesía romántica que incluye sus famosas rimas y cuentos de terror.', '1871-10-05', 
-					'Español', 215.00, 80, 1, 10, 1, 6);
+					'Español', 215.00, 1, 10, 1, 6);
 call sp_AgregarLibro('Your Name', 'Una novela que narra una historia de amor y conexión entre dos adolescentes que intercambian cuerpos 
-					 y viven en diferentes momentos en el tiempo.', '2016-04-01', 'Japonés', 63.00,57, 1,9,2,1);  
+					 y viven en diferentes momentos en el tiempo.', '2016-04-01', 'Japonés', 63.00,1,9,2,1);  
 call sp_AgregarLibro('Azul', 'Un libro de poesía modernista que contiene una colección de poemas líricos y simbolistas, 
-					considerado uno de los hitos en la literatura hispanoamericana.', '1888-06-20', 'Español', 46.00,90, 1,8,3,6);  
+	considerado uno de los hitos en la literatura hispanoamericana.', '1888-06-20', 'Español', 46.00,1,8,3,6);  
 call sp_AgregarLibro('Desolación', 'Una compilación de poemas que abordan temas como el amor, la maternidad, la soledad y la desesperanza,
-					escritos con una prosa lírica y melancólica.', '1922-04-08' ,'Español', 81.00,90, 2,7,4,6);
+	escritos con una prosa lírica y melancólica.', '1922-04-08' ,'Español', 81.00,2,7,4,6);
 call sp_AgregarLibro('Rayuela', 'Una novela experimental que ofrece múltiples formas de lectura. 
-					Los lectores pueden elegir diferentes órdenes para leer los capítulos y explorar distintas narrativas.','1963-01-25', 'Español', 47.99,110, 1,6,5,1);
+	Los lectores pueden elegir diferentes órdenes para leer los capítulos y explorar distintas narrativas.','1963-01-25', 'Español', 47.99,1,6,5,1);
 call sp_AgregarLibro('Cien años de soledad', ' Una obra maestra del realismo mágico que narra la historia de la familia Buendía a lo largo de varias generaciones
-					en el pueblo ficticio de Macondo.','1967-05-10','Español', 8.00,63,3,1,6,1);
+	en el pueblo ficticio de Macondo.','1967-05-10','Español', 8.00,3,1,6,1);
 call sp_AgregarLibro('One Piece', 'Una exitosa serie de manga y anime que sigue las aventuras de Monkey D. Luffy y su tripulación en busca del tesoro más grande del mundo,
-					el One Piece.','1997-07-26','Japonés', 26.99,59,2,3,7,4);
+	el One Piece.','1997-07-26','Japonés', 26.99,2,3,7,4);
 call sp_AgregarLibro('Harry Potter y la piedra filosofal', ' El primer libro de la serie "Harry Potter", que introduce al joven mago Harry Potter y su entrada 
-					al mundo mágico de Hogwarts.','1997-04-26', 'Inglés', 15.00,85,3,2,8,2);
+	al mundo mágico de Hogwarts.','1997-04-26', 'Inglés', 15.00,3,2,8,2);
 call sp_AgregarLibro('1Q84', 'Una novela surrealista que combina elementos de misterio, fantasía y romance. La historia sigue a dos personajes y su conexión 
-					en un mundo alternativo.', '2009-10-05', 'Inglés',32.99,78,2,4,9,1);
+	en un mundo alternativo.', '2009-10-05', 'Inglés',32.99,2,4,9,1);
 call sp_AgregarLibro('La casa de los espíritus',' Una novela que abarca varias generaciones de la familia Trueba y muestra la historia de Chile a través de los ojos
-					de sus personajes.', '1982-12-25', 'Español', 20.00,69, 3,5,10,1);   
+	de sus personajes.', '1982-12-25', 'Español', 20.00,3,5,10,1);   
 
 -- Listar libros -- 
 Delimiter $$
@@ -552,7 +544,6 @@ Delimiter $$
 				l.fechaDePublicacion,
 				l.idiomaLibro,
 				l.costoLibro,
-                l.stockLibro,
 				l.idTipoLibro,
 				l.idAutor,
 				l.idEditorial,
@@ -566,7 +557,7 @@ Call sp_ListarLibros();
 -- Editar libro -- 
 Delimiter $$
 	Create procedure sp_EditarLibro(in idLibro int, in tituloLibro varchar(100), in descripcionLibro varchar(250), in fechaDePublicacion date,
-									in idiomaLibro varchar(30), in costoLibro decimal(10,2), in stockLibro int, in idTipoLibro int, in idAutor int, in idEditorial int, in idCategoria  int)
+									in idiomaLibro varchar(30), in costoLibro decimal(10,2), in idTipoLibro int, in idAutor int, in idEditorial int, in idCategoria  int)
 		Begin
 			Update Libro l
 				set l.idLibro = idLibro, 
@@ -575,7 +566,6 @@ Delimiter $$
 					l.fechaDePublicacion = fechaDePublicacion,
 					l.idiomaLibro = idiomaLibro, 
 					l.costoLibro = costoLibro, 
-                    l.stockLibro = stockLibro,	
 					l.idTipoLibro = idTipoLibro, 
 					l.idAutor = idAutor, 
 					l.idEditorial = idEditorial,
@@ -604,7 +594,6 @@ Delimiter $$
 				l.fechaDePublicacion,
 				l.idiomaLibro,
 				l.costoLibro,
-                l.stockLibro,
 				l.idTipoLibro,
 				l.idAutor,
 				l.idEditorial,
@@ -612,6 +601,157 @@ Delimiter $$
 			from Libro l where l.idLibro = id;
         end$$
 Delimiter ;
+
+-- ------------------------------------------------------------------------------------------------------- --
+
+/* ENTIDAD COMPRA */
+-- Agregar compra --
+Delimiter $$
+	Create procedure sp_AgregarCompra(in precioCompra decimal(10,2), in fechaCompra date, in idLibro int)
+		Begin 
+			Insert into Compra(precioCompra, fechaCompra, idLibro)
+				values(precioCompra, fechaCompra, idLibro); 
+        end $$
+Delimiter ;
+
+call sp_AgregarCompra(5000.00, '2023-06-05', 1);
+call sp_AgregarCompra(3500.00, '2023-07-01', 2);
+call sp_AgregarCompra(8000.00, '2023-06-15', 3);
+call sp_AgregarCompra(2000.00, '2023-06-20', 4);
+call sp_AgregarCompra(6000.00, '2023-07-02', 5);
+call sp_AgregarCompra(4500.00, '2023-06-25', 6);
+call sp_AgregarCompra(7000.00, '2023-06-10', 7);
+call sp_AgregarCompra(3000.00, '2023-07-05', 8);
+call sp_AgregarCompra(5500.00, '2023-06-30', 9);
+call sp_AgregarCompra(4000.00, '2023-07-03', 10);
+
+-- Listar compras --
+Delimiter $$
+	Create procedure sp_ListarCompras()
+		Begin 
+			Select 
+				idCompra, 
+				precioCompra, 
+				fechaCompra, 
+				idLibro
+				from Compra; 
+		end $$
+Delimiter ;
+
+call sp_ListarCompras();
+
+-- Editar Compra
+Delimiter $$
+	Create procedure sp_EditarCompra(in idCom int, in preCom decimal(10,2), in fechaCom date, in idLib int)
+		Begin 
+			  Update Compra
+				set precioCompra = preCom,
+                    fechaCompra = fechaCom,
+                    idLibro = idLib
+                    where Pre.codigoPresupuesto = codPres;
+                    
+        end $$
+Delimiter ;
+
+-- Eliminar compra --
+Delimiter $$
+	Create procedure sp_EliminarCompra(in idCompra int) 
+		begin 
+			delete from Compra 
+				where idCompra = idCompra; 
+        end $$
+Delimiter 
+
+-- Buscar compra --
+Delimiter $$
+	Create procedure sp_BuscarPresupuesto(in idCompra int)
+		Begin 
+			Select 
+				Com.idCompra, 
+				Com.precioCompra, 
+				Com.fechaCompra, 
+				Com.idLibro
+				from Compra Com where Com.idCompra = idCompra; 
+        end $$ 
+Delimiter ;
+
+-- ------------------------------------------------------------------------------------------------------- --
+
+/* ENTIDAD RENTA */
+-- Agregar renta --
+Delimiter $$
+	Create procedure sp_AgregarRenta(in precioRentaDia decimal(10,2), in fechaDeRenta date, in fechaDeVencimientoRenta date)
+		Begin
+			insert into Renta (precioRentaDia, fechaDeRenta, fechaDeVencimientoRenta)
+				values (precioRentaDia, fechaDeRenta, fechaDeVencimientoRenta);
+		End$$
+Delimiter ;
+
+call sp_AgregarRenta(55.50, '2023-12-12', '2023-12-28');
+call sp_AgregarRenta(42.60, '2024-04-10', '2024-05-10');
+call sp_AgregarRenta(60.40, '2024-02-14', '2024-03-01');
+call sp_AgregarRenta(25.00, '2023-09-01', '2023-10-01');
+call sp_AgregarRenta(80.50, '2024-07-04', '2024-08-22');
+call sp_AgregarRenta(70.50, '2024-10-01', '2024-12-27');
+call sp_AgregarRenta(10.50, '2024-03-04', '2024-11-11');
+call sp_AgregarRenta(42.50, '2024-07-04', '2024-08-24');
+call sp_AgregarRenta(23.50, '2024-08-09', '2024-09-29');
+call sp_AgregarRenta(32.50, '2024-01-07', '2024-10-30');
+
+-- Listar rentas --
+Delimiter $$
+Create procedure sp_ListarRentas()
+	Begin
+		Select
+			R.idRenta,
+            R.precioRentaDia,
+            R.fechaDeRenta,
+            R.fechaDeVencimientoRenta
+		From Renta R;
+    End$$
+Delimiter ;
+
+call sp_ListarRentas();
+
+-- Editar Renta --
+Delimiter $$
+	Create procedure sp_EditarRenta(in idRenta int, in precioRentaDia decimal(10,2), in fechaDeRenta date, in fechaDeVencimientoRenta date)
+		Begin
+			Update Renta R 
+				set R.precioRentaDia = precioRentaDia,
+					R.fechaDeRenta = fechaDeRenta, 
+					R.fechaDeVencimientoRenta = fechaDeVencimientoRenta
+				where  R.idRenta = idRenta;
+		End $$
+Delimiter ;
+
+call sp_EditarRenta(5, 80.00, '2023-01-01', '2024-12-12');
+
+-- Eliminar Renta --
+Delimiter $$
+	Create procedure sp_EliminarRenta(in idRen int)
+		Begin
+			Delete from Renta
+				where idRenta = idRen;
+		End $$
+Delimiter ;
+
+-- call sp_EliminarRenta(3);
+
+-- Buscar renta --
+Delimiter $$
+Create procedure sp_BuscarRenta(in idRenta int)
+	Begin
+		Select
+			R.idRenta,
+            R.precioRentaDia,
+            R.fechaDeRenta,
+            R.fechaDeVencimientoRenta
+		From Renta R where R.idRenta = idRenta;
+    End$$
+Delimiter ;
+
+call sp_BuscarRenta(2);
 
 -- ----------------------------------------------------------------------------------------------------- --
 
@@ -780,180 +920,80 @@ call sp_BuscarUsuario(2);
 
 -- ------------------------------------------------------------------------------------------------------- --
 
-/* ENTIDAD SUCURSAL */
--- Agregar Sucursal --
+/* ENTIDAD DETALLE FACTURA */
+-- Agregar DetalleFactura --
 Delimiter $$
-	Create procedure sp_AgregarSucursal(in nombreSucursal varchar(35), in direccionSucursal varchar(75), in telefonoSucursal varchar(10))
+	Create procedure sp_AgregarDetalleFactura(in idCompra int, in idRenta int)
 		Begin
-			Insert into Sucursal (nombreSucursal, direccionSucursal, telefonoSucursal)
-				values (nombreSucursal, direccionSucursal, telefonoSucursal);
+			insert into DetalleFactura (idCompra, idRenta)
+				values(idCompra, idRenta);
         end $$
-Delimiter ; 
+delimiter ;
 
-call sp_AgregarSucursal('Online', '', '');
-call sp_AgregarSucursal('Edificio Luna', '8va Av. 9-96 z.21', '6452-1325');
-call sp_AgregarSucursal('Edificio Sol', '9na Calle 5-52 z.11', '65845211');
-call sp_AgregarSucursal('Edificio Cero', 'Las Carchas, z.11', '2424-2424');
-call sp_AgregarSucursal('Edificio Pi', 'Condado Ricinos z.14', '1234-5678');
-call sp_AgregarSucursal('Edificio Pablo Neruda', '8va Calle 9-63 Col. Jardines Oscuros z.13', '7410-2589');
-call sp_AgregarSucursal('Edificio Gabriel Garcia Márquez', 'Condado Las Buganvilias Z.1', '4656-4512');
-call sp_AgregarSucursal('Edificio Julio Verne', '8va Av. 12-42 Villa Las Flores z.2', '2475-0122');
-call sp_AgregarSucursal('Edificio Miguel Angel Asturias', 'Avenida de los Álamos 8-90, Zona 16, Villa Nueva', '5274-8016');
-call sp_AgregarSucursal('Edificio Ricardo Arjona', 'Calle del Sol 23-67, Zona 10, Mixco', '5368-4207');
-call sp_AgregarSucursal('Edificio Erick Barrondo ', '7a Avenida 15-45, Zona 4, Ciudad de Guatemala', '2541-9990');
+call sp_AgregarDetalleFactura(null, 1);
+call sp_AgregarDetalleFactura(null, 2);
+call sp_AgregarDetalleFactura(null, 3);
+call sp_AgregarDetalleFactura(null, 4);
+call sp_AgregarDetalleFactura(null, 5);
+call sp_AgregarDetalleFactura(6, null);
+call sp_AgregarDetalleFactura(7, null);
+call sp_AgregarDetalleFactura(8, null);
+call sp_AgregarDetalleFactura(9, null);
+call sp_AgregarDetalleFactura(10, null);
 
--- Listar Sucursales---
+
+-- Listar DetalleFacturas --
 Delimiter $$
-	Create procedure sp_ListarSucursales()
+	Create procedure sp_ListarDetalleFacturas()
 		Begin
-			Select * from Sucursal;
+			select
+				df.idDetalleFactura,
+                df.idCompra,
+                df.idRenta
+			from DetalleFactura df;
+        end $$
+Delimiter ;
+
+call sp_ListarDetalleFacturas();
+
+-- Editar DetalleFactura --
+delimiter $$
+	Create procedure sp_EditarDetalleFactura(in codigoDetalleFactura int, in codCompra int, in codRenta int)
+		Begin
+			Update DetalleFactura df
+				set 
+					df.idCompra = codCompra, 
+					df.idRenta = codRenta
+					where df.idDetalleFactura = codigoDetalleFactura; 				
         End $$
-Delimiter ; 
+delimiter ;
 
-call sp_ListarSucursales();
+-- call sp_EditarDetalleFactura(2, 3, 3);
 
--- Editar Sucursal ---
+-- Eliminar DetalleFactura --
 Delimiter $$
-	Create procedure sp_EditarSucursal(in idSucursal int, in nomSuc varchar(35), in dirSuc varchar(75), in telSuc varchar(10))
-		Begin
-			Update Sucursal
-				set nombreSucursal = nomSuc,
-					direccionSucursal = dirSuc,
-					telefonoSucursal = telSuc
-			where idSucursal = idSuc;
-        End $$
-Delimiter ; 
+		Create procedure sp_EliminarDetalleFactura(in codigoDetalleFactura int)
+			Begin	
+				Delete from DetalleFactura  
+					where idDetalleFactura = codigoDetalleFactura; 
+			end $$
+delimiter ; 
 
--- Eliminar Sucursales---
-Delimiter $$
-	Create procedure sp_EliminarSucursales(in idSuc int)
-		Begin
-			Delete from Sucursal
-				where idSucursal = idSuc;
-        End $$
-Delimiter ;
+-- call sp_EliminarDetalleFactura(1);
 
--- Buscar Sucursal ---
-Delimiter $$
-	Create procedure sp_BuscarSucursal(in idSuc int)
-		Begin
-			Select * from Sucursal
-				where idSucursal = idSuc;
-        End $$
-Delimiter ; 
+-- Buscar DetalleFactura --
+delimiter $$
+	create procedure sp_BuscarDetalleFactura(in codigoDetalleFactura int)
+		begin
+			select
+				df.idDetalleFactura,
+                df.idCompra,
+                df.idRenta
+			from DetalleFactura df where df.idDetalleFactura = codigoDetalleFactura;        
+        end $$
+delimiter ;
 
-call sp_BuscarSucursal(1);
-
--- ------------------------------------------------------------------------------------------------------- --
-
-/* ENTIDAD TipoServicio */
--- Agregar TipoServicio --
-Delimiter $$
-	create procedure sp_AgregarTipoServicio(in nombreTipoServicio varchar(35))
-		Begin
-			Insert into TipoServicio(nombreTipoServicio)
-            values(nombreTipoServicio);
-        End$$
-Delimiter ;
-
-Call sp_AgregarTipoServicio('Compra');
-Call sp_AgregarTipoServicio('Renta');
-
--- Listar TipoServicio --
-Delimiter $$
-	create procedure sp_ListarTipoServicios()
-		Begin
-			Select
-				t.idTipoServicio,
-				t.nombreTipoServicio
-            from TipoServicio t;
-        End$$
-Delimiter ;
-
--- Buscar TipoServicio --
-Delimiter $$
-	create procedure sp_BuscarTipoServicio(in id int)
-		Begin
-			Select
-				t.idTipoServicio,
-				t.nombreTipoServicio
-            from TipoServicio t where  t.idTipoServicio = id;
-        End$$
-Delimiter ;
-
--- ------------------------------------------------------------------------------------------------------- --
-
-/* ENTIDAD Servicio */
--- Agregar servicio --
-Delimiter $$
-	Create procedure sp_AgregarServicio(in costoServicio decimal(10,2), in fechaServicio date, in fechaVencimientoServicio date, in idTipoServicio int, in idLibro int, in idUsuario int)
-		Begin
-			Insert into Servicio (costoServicio, fechaServicio, fechaVencimientoServicio, idTipoServicio, idLibro, idUsuario)
-				values (costoServicio, fechaServicio, fechaVencimientoServicio, idTipoServicio, idLibro, idUsuario);
-        End$$
-Delimiter ;
-
-call sp_AgregarServicio(215.00, '2022-02-22', '2022-03-22', 1, 1, 1);
-call sp_AgregarServicio(63.00, '2023-08-15', '2032-09-15', 1, 2, 1);
-call sp_AgregarServicio(46.00, '2023-02-22', '2022-03-22', 1, 3, 1);
-call sp_AgregarServicio(81.00, '2021-01-26', '2021-02-26', 2, 4, 2);
-call sp_AgregarServicio(47.99, '2020-02-22', '2020-03-22', 2, 5, 2);
-call sp_AgregarServicio(8.00, '2022-12-24', '2023-01-24', 2, 6, 2);
-call sp_AgregarServicio(26.99, '2019-10-20', '2019-11-20', 1, 7, 3);
-call sp_AgregarServicio(15.00, '2020-03-20', '2020-04-20', 1, 8, 3);
-call sp_AgregarServicio(32.99, '2021-09-20', '2021-10-20', 2, 9, 4);
-call sp_AgregarServicio(20.00, '2023-10-25', '2023-10-25', 2, 10, 5);
-
-
--- Listar Servicio --
-Delimiter $$
-	Create procedure sp_ListarServicios()
-		Begin
-			Select * from Servicio;
-		End $$
-Delimiter ;
-
-call sp_ListarServicios();
-
-
--- Editar Servicio --
-Delimiter $$
-	Create procedure sp_EditarServicio (in idServ int, in costoServ decimal(10,2), in fechaServ date, in fechaVencimientoServ date, in idTipoServ int, in idLib int, in idUs int)
-		Begin
-				Update Servicio S
-					set S.costoServicio = costoServ, 
-						S.fechaServicio = fechaServ, 
-                        s.fechaVencimientoServicio = fechaVencimientoServ, 
-                        S.idTipoServicio = idTipoServ, 
-                        S.idLibro = idLib, 
-                        S.idUsuario = idUs
-					where S.idServicio = idServ;
-        End $$
-Delimiter ;
-
--- call sp_EditarServicio(1, 0.00, '2000-01-01','2000-01-01', 1, 1, 1);
-
--- Eliminar Servicio --
-Delimiter $$
-	Create procedure sp_EliminarServicio (in idServ int)
-		Begin
-			Delete from Servicio
-				where idServicio = idServ;
-        End $$
-Delimiter ;
-
--- call sp_EliminarServicio(1);
-
--- Buscar Servicio --
-Delimiter $$
-	Create procedure sp_BuscarServicio (in idServ int)
-		Begin
-			Select * from Servicio S
-				where S.idServicio = idServ;
-        End $$
-Delimiter ;
-
-call sp_BuscarServicio(2);
+call sp_BuscarDetalleFactura(2);
 
 
 -- ------------------------------------------------------------------------------------------------------- --
@@ -961,23 +1001,23 @@ call sp_BuscarServicio(2);
 /* ENTIDAD FACTURA */
 -- Agregar factura --
 Delimiter $$
-	Create procedure sp_AgregarFactura(in fechaEmision date, in horaEmision time, in totalFactura decimal(10,2), in idSucursal int, in idUsuario int)
+	Create procedure sp_AgregarFactura(in fechaDeEmision date, in totalFactura decimal(10,2), in idUsuario int, in idDetalleFactura int)
 		Begin
-			Insert into Factura (idFactura, fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario)
-				values (idFactura, fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario);
+			Insert into Factura (fechaDeEmision, totalFactura, idUsuario, idDetalleFactura)
+				values (fechaDeEmision, totalFactura, idUsuario, idDetalleFactura);
         End $$
 Delimiter ; 
 
-call sp_AgregarFactura('2023-01-03', '10:30:00', 400.30, 1, 1);
-call sp_AgregarFactura('2023-02-04', '11:45:00', 100.50, 2, 2);
-call sp_AgregarFactura('2023-03-05', '13:15:00', 200.00, 3, 3);
-call sp_AgregarFactura('2020-04-05', '18:30:00', 700.10, 4, 4);
-call sp_AgregarFactura('2023-05-05', '14:14:00', 500.10, 5, 5);
-call sp_AgregarFactura('2023-06-05', '07:39:00', 300.10, 6, 6);
-call sp_AgregarFactura('2021-07-05', '09:50:00', 800.60, 7, 7);
-call sp_AgregarFactura('2019-08-05', '12:06:00', 600.70, 8, 8);
-call sp_AgregarFactura('2021-09-05', '11:24:00', 500.90, 9, 9);
-call sp_AgregarFactura('2022-01-05', '14:34:00', 600.90, 10, 10);
+call sp_AgregarFactura('2023-01-03', 400.30, 1, 1);
+call sp_AgregarFactura('2023-02-04', 100.50, 2, 2);
+call sp_AgregarFactura('2023-03-05', 200.00, 3, 3);
+call sp_AgregarFactura('2020-04-05', 700.10, 4, 4);
+call sp_AgregarFactura('2023-05-05', 500.10, 5, 5);
+call sp_AgregarFactura('2023-06-05', 300.10, 6, 6);
+call sp_AgregarFactura('2021-07-05', 800.60, 7, 7);
+call sp_AgregarFactura('2019-08-05', 600.70, 8, 8);
+call sp_AgregarFactura('2021-09-05', 500.90, 9, 9);
+call sp_ListarDetalleFacturas;
 
 -- Listar facturas --
 Delimiter $$
@@ -991,14 +1031,13 @@ call sp_ListarFacturas();
 
 -- Editar factura --
 Delimiter $$
-	Create procedure sp_EditarFactura(in fechaEmision date, in horaEmision time, in totalFactura decimal(10,2), in idSucursal int, in idUsuario int)
+	Create procedure sp_EditarFactura(in fechaDeEmision date, in totalFactura decimal(10,2), in idUsuario int, in idDetalleFactura int)
 		Begin
 			Update Factura
-				set fechaEmision = fechaEmision,
-					horaEmision = horaEmision,
+				set fechaDeEmision = fechaDeEmision,
 					totalFactura = totalFactura,
-                    idSucursal = idSucursal,
-					idUsuario = idUsuario
+					idUsuario = idUsuario,
+                    idDetalleFactura = idDetalleFactura
 			where idFactura = idFactura;
         End $$
 Delimiter ;
@@ -1008,7 +1047,7 @@ Delimiter $$
 	Create procedure sp_EliminarFactura(in idFactura int)
 		Begin
 			Delete from Factura
-				where idFactura = idFactura;
+				where idFactura= idFactura;
         End $$
 Delimiter ; 
 
@@ -1024,76 +1063,6 @@ Delimiter $$
 Delimiter ; 
 
 call sp_BuscarFactura(1);
-
-
--- ------------------------------------------------------------------------------------------------------- --
-
-/* ENTIDAD DATALLEFACTURA */
--- Agregar Datalle Factura --
-Delimiter $$
-	Create procedure sp_AgregarDetalleFactura(in idFactura int, in idServicio int)
-		Begin
-			Insert into DetalleFactura(idFactura, idServicio)
-				values(idFactura, idServicio);
-        End $$
-Delimiter ;
-
-call sp_AgregarDetalleFactura(1, 1);
-call sp_AgregarDetalleFactura(1, 2);
-call sp_AgregarDetalleFactura(1, 3);
-call sp_AgregarDetalleFactura(1, 4);
-call sp_AgregarDetalleFactura(2, 5);
-call sp_AgregarDetalleFactura(2, 6);
-call sp_AgregarDetalleFactura(3, 7);
-call sp_AgregarDetalleFactura(4, 8);
-call sp_AgregarDetalleFactura(5, 9);
-call sp_AgregarDetalleFactura(5, 10);
-
--- Listar Detalle Factura --
-Delimiter $$
-	Create procedure sp_ListarDetalleFactura()
-		Begin
-			Select * from DetalleFactura;
-        End $$
-Delimiter ;
-
-Call sp_ListarDetalleFactura();
-
--- Editar Detalle Factura --
-Delimiter $$
-	Create procedure sp_EditarDetalleFactura(in idDetalleFact int, in idFact int, in idServ int)
-		Begin
-			Update DetalleFactura DF
-				set DF.idFactura =  idFact,
-					DF.idServicio = idServ
-				where DF.idDetalleFactura = idDetalleFact;
-        End $$
-Delimiter ;
-
--- call sp_EditarDetalleFactura(1, 10,10);
-
--- Eliminar Detalle Factura --
-Delimiter $$
-	Create procedure sp_EliminarDetalleFactura(in idDetalleFact int)
-		Begin
-			Delete from DetalleFactura
-				where idDetalleFactura = idDetalleFact;
-        End $$
-Delimiter ;
-
--- Call sp_EliminarDetalleFactura (1);
-
--- Buscar Detalle Factura --
-Delimiter $$
-	Create procedure sp_BuscarDetalleFactura(in idDetalleFact int)
-		Begin
-			Select * from DetalleFactura DF
-				where DF.idDetalleFactura = idDetalleFact;
-        End$$
-Delimiter ;
-
-Call sp_BuscarDetalleFactura(2);
-
 
 -- ------------------------------------------------------------------------------------------------------- --
 
@@ -1221,6 +1190,71 @@ Delimiter $$
 					where s.idSuscripcion=id;
         End$$
 Delimiter ;
+
+-- ------------------------------------------------------------------------------------------------------- --
+
+/* ENTIDAD SUCURSAL */
+-- Agregar Sucursal --
+Delimiter $$
+	Create procedure sp_AgregarSucursal(in nombreSucursal varchar(35), in direccionSucursal varchar(75), in telefonoSucursal varchar(10))
+		Begin
+			Insert into Sucursal (nombreSucursal, direccionSucursal, telefonoSucursal)
+				values (nombreSucursal, direccionSucursal, telefonoSucursal);
+        end $$
+Delimiter ; 
+
+call sp_AgregarSucursal('Edificio Luna', '8va Av. 9-96 z.21', '6452-1325');
+call sp_AgregarSucursal('Edificio Sol', '9na Calle 5-52 z.11', '65845211');
+call sp_AgregarSucursal('Edificio Cero', 'Las Carchas, z.11', '2424-2424');
+call sp_AgregarSucursal('Edificio Pi', 'Condado Ricinos z.14', '1234-5678');
+call sp_AgregarSucursal('Edificio Pablo Neruda', '8va Calle 9-63 Col. Jardines Oscuros z.13', '7410-2589');
+call sp_AgregarSucursal('Edificio Gabriel Garcia Márquez', 'Condado Las Buganvilias Z.1', '4656-4512');
+call sp_AgregarSucursal('Edificio Julio Verne', '8va Av. 12-42 Villa Las Flores z.2', '2475-0122');
+call sp_AgregarSucursal('Edificio Miguel Angel Asturias', 'Avenida de los Álamos 8-90, Zona 16, Villa Nueva', '5274-8016');
+call sp_AgregarSucursal('Edificio Ricardo Arjona', 'Calle del Sol 23-67, Zona 10, Mixco', '5368-4207');
+call sp_AgregarSucursal('Edificio Erick Barrondo ', '7a Avenida 15-45, Zona 4, Ciudad de Guatemala', '2541-9990');
+
+-- Listar Sucursales---
+Delimiter $$
+	Create procedure sp_ListarSucursales()
+		Begin
+			Select * from Sucursal;
+        End $$
+Delimiter ; 
+
+call sp_ListarSucursales();
+
+-- Editar Sucursal ---
+Delimiter $$
+	Create procedure sp_EditarSucursal(in idSucursal int, in nomSuc varchar(35), in dirSuc varchar(75), in telSuc varchar(10))
+		Begin
+			Update Sucursal
+				set nombreSucursal = nomSuc,
+					direccionSucursal = dirSuc,
+					telefonoSucursal = telSuc
+			where idSucursal = idSuc;
+        End $$
+Delimiter ; 
+
+-- Eliminar Sucursales---
+Delimiter $$
+	Create procedure sp_EliminarSucursales(in idSuc int)
+		Begin
+			Delete from Sucursal
+				where idSucursal = idSuc;
+        End $$
+Delimiter ;
+
+-- Buscar Sucursal ---
+Delimiter $$
+	Create procedure sp_BuscarSucursal(in idSuc int)
+		Begin
+			Select * from Sucursal
+				where idSucursal = idSuc;
+        End $$
+Delimiter ; 
+
+call sp_BuscarSucursal(1);
 
 
 -- ------------------------------------------------------------------------------------------------------- --
