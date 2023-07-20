@@ -1301,3 +1301,8 @@ Delimiter $$
 Delimiter ;
 
 call sp_BuscarEmpleado(4);
+
+call sp_ListarTipoLibros();
+
+
+select * from TipoLibro;
