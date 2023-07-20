@@ -1259,7 +1259,7 @@ Delimiter $$
 				from Empleado EM;
         End$$
 Delimiter ;
-
+Select * from Empleado;
 call sp_ListarEmpleados();
 
 -- Editar empleado --
