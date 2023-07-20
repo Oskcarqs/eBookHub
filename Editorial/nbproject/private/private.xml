@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/Editorial/web/View/listarEditorial.jsp</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/Editorial/src/java/interfaces/CRUDEditorial.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/Editorial/src/java/modelDAO/EditorialDAO.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/Editorial/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/Editorial/src/java/controller/ControladorEditorial.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/Editorial/src/java/configuration/Conexion.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/Editorial/web/View/editarEditorial.jsp</file>
+        </group>
+    </open-files>
+</project-private>
