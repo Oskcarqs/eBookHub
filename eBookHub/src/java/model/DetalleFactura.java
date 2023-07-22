@@ -11,7 +11,7 @@ public class DetalleFactura {
 
     public DetalleFactura(int idDetalleFactura, int idFactura, int idServicio) {
         this.idDetalleFactura = idDetalleFactura;
-        this.idFactura = idFactura;
+        this.idFactura =  idFactura;
         this.idServicio = idServicio;
     }
 
