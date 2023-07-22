@@ -17,7 +17,7 @@
 */
 
 
-Drop database if exists eBookHub;
+Drop database if exists  eBookHub;
 Create database eBookHub;
 
 Use eBookHub;
