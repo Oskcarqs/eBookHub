@@ -963,8 +963,8 @@ call sp_BuscarServicio(2);
 Delimiter $$
 	Create procedure sp_AgregarFactura(in fechaEmision date, in horaEmision time, in totalFactura decimal(10,2), in idSucursal int, in idUsuario int)
 		Begin
-			Insert into Factura (idFactura, fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario)
-				values (idFactura, fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario);
+			Insert into Factura (fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario)
+				values (fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario);
         End $$
 Delimiter ; 
 
