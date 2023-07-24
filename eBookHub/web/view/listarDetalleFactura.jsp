@@ -14,32 +14,28 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Listar Detalle Factura</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">                
     </head>
     <body>
-        <div>
-            <h1>Registro Detalle Factura</h1>
-            <a href="ControladorDetalleFactura?accion=addDetalleFactura">Agregar Detalle Factura</a>
-            <table border="1">
+        <div class="container mt-4">
+            <h1>Registro Detalle Factura</h1><br>
+            <a href="ControladorDetalleFactura?accion=addDetalleFactura">Agregar Detalle Factura</a><br><br>
+            <table class="table text-center table-bordered table-hover">
                 <thead>
-                    <tr>
-                        <th>Id Detalle Factura</th>
-                        <th>Id Factura</th>
-                        <th>Id Servicio</th>
-                        <th>ACCIONES</th>
-                    </tr>
+                <th>Id Detalle Factura</th>
+                <th>Id Factura</th>
+                <th>Id Servicio</th>
+                <th>ACCIONES</th>
                 </thead>
                 <%
-                
+
                     DetalleFacturaDAO dao = new DetalleFacturaDAO();
                     List<DetalleFactura> listarDetalleFactura = dao.listarDetalleFactura();
                     Iterator<DetalleFactura> iterator = listarDetalleFactura.iterator();
                     DetalleFactura df = null;
-                    while(iterator.hasNext()){
-                        
+                    while (iterator.hasNext()) {
+
                         df = iterator.next();
-                        
-                    
-                
                 %>
                 <tbody>
                     <tr>
@@ -47,8 +43,12 @@
                         <td><%= df.getIdFactura()%></td>
                         <td><%= df.getIdServicio()%></td>
                         <td>
-                            <a href="ControladorDetalleFactura?accion=editarDetalleFactura&idDetallFactura=<%= df.getIdDetalleFactura()%>">Edit</a>
-                            <a href="">Eliminar</a>
+                            <button type="button" class="btn btn-success" id="btnEditar">
+                                <a href="ControladorDetalleFactura?accion=editarDetalleFactura&idDetallFactura=<%= df.getIdDetalleFactura()%>" style="color: #fff;">Edit</a>
+                            </button>                            
+                            <button type="button" class="btn btn-danger">
+                                <a href="" style="color: #fff;">Eliminar</a>
+                            </button>
                         </td>
                     </tr>
                     <%}%>

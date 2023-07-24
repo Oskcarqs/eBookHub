@@ -17,7 +17,7 @@
 */
 
 
-Drop database if exists eBookHub;
+Drop database if exists  eBookHub;
 Create database eBookHub;
 
 Use eBookHub;
@@ -184,7 +184,9 @@ Create table FacturaSuscripcion(
 		references Usuario (idUsuario)  on delete cascade
 );
 
-;
+
+    
+    select * from FacturaSuscripcion;
 
 -- Jorge Revolorio -- 
 Create table Empleado(
@@ -1306,3 +1308,10 @@ call sp_ListarTipoLibros();
 
 
 select * from TipoLibro;
+
+select * from Categoria;
+
+insert into FacturaSuscripcion(fechaDeInicio, fechaDeVencimiento, idTipoSuscripcion, idUsuario)
+	values('2020-07-31', '2022-07-31', 1, 1);
+insert into FacturaSuscripcion(fechaDeInicio, fechaDeVencimiento, idTipoSuscripcion, idUsuario)
+	values('2021-07-31', '2022-07-31', 1, 1);    

@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>Agregar Tipo Libro</h1>
-        <form action="Controlador">
+        <form action="ControladorTipoLibro">
             
             <strong>Nombre Tipo Libro:</strong>
             <br>
