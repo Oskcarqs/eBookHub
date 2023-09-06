@@ -1,7 +1,6 @@
 package modelDAO;
 
-import configuracion.Conexion;
-import interfaces.CRUD;
+import config.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,87 +8,97 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Sucursal;
 
-public class SucursalDAO implements CRUD{
+public class SucursalDAO{
     
     Conexion conect = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
-    Sucursal nSucursal = new Sucursal();
+    Sucursal sucursal = new Sucursal();
+    int resp;
 
-    @Override
-    public List listar() {
-        ArrayList<Sucursal> listaSucursal = new ArrayList<>();
-        String sql = "select * from Sucursal;";
-        try {
+    public List listarSucursal() {
+        List<Sucursal> listaSucursal = new ArrayList<>();
+        String sql = "select * from sucursal";
+        try{
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while(rs.next()){
                 Sucursal nuevaSucursal = new Sucursal();
-                nuevaSucursal.setIdSucursal(rs.getInt("idSucursal"));
-                nuevaSucursal.setNombreSucursal(rs.getString("nombreSucursal"));
+                nuevaSucursal.setIdSucursal(rs.getInt(1));
+                nuevaSucursal.setNombreSucursal(rs.getString(2));
+                nuevaSucursal.setDireccionSucursal(rs.getString(3));
+                nuevaSucursal.setTelefonoSucursal(rs.getString(4));
                 listaSucursal.add(nuevaSucursal);
-            }
-        } catch (Exception e) {
+            }            
+        }catch(Exception e){
             e.printStackTrace();
         }
         return listaSucursal;
     }
 
-    @Override
-    public Sucursal list(int id) {
-        String sql = "Select * from persona where codigoPersona =" + id;
-        try {
+    public Sucursal listSucursal(int id) {
+        Sucursal sucur = new Sucursal();
+        String sql = "select * from Sucursal where idSucursal = " + id;
+        try{
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while(rs.next()){
-                nSucursal.setIdSucursal(rs.getInt("idSucursal"));
-                nSucursal.setNombreSucursal(rs.getString("nombreSucursal"));
+                sucur.setNombreSucursal(rs.getString(2));
+                sucur.setDireccionSucursal(rs.getString(3));
+                sucur.setTelefonoSucursal(rs.getString(4));
             }
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
         }
-        return nSucursal;
+        return sucursal;
     }
 
-    @Override
-    public boolean add(Sucursal suc) {
-        
-        String sql = "Insert into Sucursal (nombreSucursal) values('"+suc.getIdSucursal()+"','"+suc.getNombreSucursal()+"')";
-        
+    public int addSucursal(Sucursal suc) {
+        String sql = "Insert into Sucursal(nombreSucursal, direccionSucursal, telefonoSucursal) values(?,?,?)";
         try {
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
+            ps.setString(1, suc.getNombreSucursal());
+            ps.setString(2, suc.getDireccionSucursal());
+            ps.setString(3, suc.getTelefonoSucursal());
             ps.executeUpdate();
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
+            System.out.println("No se puede agregar Sucursal");            
         }
-        
-        return false;
+        return resp;
     }
 
-    @Override
-    public boolean edit(Sucursal suc) {
-        //Update persona set DPI = '', nombrePersona = '' where codigoPersona = ?;
-//        String sql = "Update persona set DPI = '"+ per.getDPI()+"',nombrePersona = '"+ per.getNombrePersona()+"'where codigoPersona ="+per.getCodigoPersona();
-//        String sql = "Update Sucursal set nombreSucursal = nomSuc '"+ suc.getNombreSucursal()"'where idSucursal ="+suc.getIdSucursal();
-        try {
+    public boolean editSucursal(Sucursal suc) {
+        String sql = "Update Sucursal set nombreSucursal = ?, direccionSucursal = ?, telefonoSucursal = ? where idSucursal = ?";
+        try{
             con = conect.getConnection();
-//            ps = con.prepareStatement(sql);
+            ps = con.prepareStatement(sql);
+            ps.setString(1, suc.getNombreSucursal());   
+            ps.setString(2, suc.getDireccionSucursal());
+            ps.setString(3, suc.getTelefonoSucursal());
+            ps.setInt(4, suc.getIdSucursal());
             ps.executeUpdate();
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
+            System.out.println("no se pudo editar");
         }
         return false;
     }
 
-    @Override
-    public boolean eliminar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean eliminarSucursal(int id) {
+        String sql= "Delete from Sucursal where idSucursal =" + id;
+        try{
+            con = conect.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.executeUpdate();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
-
- 
+    
 }
-
