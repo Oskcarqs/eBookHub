@@ -91,6 +91,25 @@ public class ControladorCliente extends HttpServlet {
         }else if(action.equalsIgnoreCase("editarCliente")){
             request.setAttribute("idCli", request.getParameter("idCliente"));
             acceso = editarCliente;
+        }else if(action.equalsIgnoreCase("ActualizarCliente")){
+            String idCliente = request.getParameter("txtIdCliente");
+            String nombreCliente = request.getParameter("txtNombreCliente");    
+            String apellidoCliente = request.getParameter("txtApellidoCliente");
+            String fechaDeNacimientoCliente = request.getParameter("txtFechaDeNacimientoCliente");
+            String direccionCliente = request.getParameter("txtDireccionCliente");
+            String telefonoCliente = request.getParameter("txtTelefonoCliente");
+            nuevoCliente.setIdCliente(Integer.parseInt(idCliente));
+            nuevoCliente.setNombreCliente(nombreCliente);
+            nuevoCliente.setApellidoCliente(apellidoCliente);
+            nuevoCliente.setFechaDeNacimientoCliente(Date.valueOf(fechaDeNacimientoCliente));
+            nuevoCliente.setDireccionCliente(direccionCliente);
+            nuevoCliente.setTelefonoCliente(telefonoCliente);
+            nuevoClienteDAO.edit(nuevoCliente);
+            acceso = listarCliente;  
+        }else if(action.equalsIgnoreCase("eliminarCliente")){
+            Integer IdCliente = Integer.parseInt(request.getParameter("idCliente"));
+            nuevoClienteDAO.eliminar(IdCliente);
+            acceso = listarCliente;
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);

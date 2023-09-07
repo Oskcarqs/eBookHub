@@ -65,12 +65,15 @@ public class AutorDAO implements CRUDAutor {
 
     @Override
     public boolean addAutor(Autor aut) {
-        String sql = "Insert into Autor (nombreAutor, apellidoAutor, nacionalidadAutor, fechaNacimientoAutor, biografiaAutor) values('"
-                + aut.getNombreAutor() + "','" + aut.getApellidoAutor() + "','" + aut.getNacionalidadAutor() + "','"
-                + aut.getFechaNacimientoAutor() + "','" + aut.getBiografiaAutor() + "')";
+        String sql = "Insert into Autor (nombreAutor, apellidoAutor, nacionalidadAutor, fechaNacimientoAutor, biografiaAutor) values(?,?,?,?,?);";
         try {
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
+            ps.setString(1, aut.getNombreAutor());
+            ps.setString(2, aut.getApellidoAutor());
+            ps.setString(3, aut.getNacionalidadAutor());
+            ps.setString(4, aut.getFechaNacimientoAutor());
+            ps.setString(5, aut.getBiografiaAutor());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

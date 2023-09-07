@@ -1,5 +1,8 @@
 package model;
 
+import java.io.InputStream;
+import java.time.LocalDate;
+
 /**
  *
  * @author Ottoniel
@@ -7,13 +10,14 @@ package model;
 public class Libro {
 
     private int idLibro;
+    private InputStream fotoLibro;
     private String tituloLibro;
     private String descripcionLibro;
     private String fechaDePublicacion;
     private String idiomaLibro;
     private double costoLibro;
+    private String tipoLibro;
     private int stockLibro;
-    private int idTipoLibro;
     private int idAutor;
     private int idEditorial;
     private int idCategoria;
@@ -21,15 +25,16 @@ public class Libro {
     public Libro() {
     }
 
-    public Libro(int idLibro, String tituloLibro, String descripcionLibro, String fechaDePublicacion, String idiomaLibro, double costoLibro, int stockLibro, int idTipoLibro, int idAutor, int idEditorial, int idCategoria) {
+    public Libro(int idLibro, InputStream fotoLibro, String tituloLibro, String descripcionLibro, String fechaDePublicacion, String idiomaLibro, double costoLibro, String tipoLibro, int stockLibro, int idAutor, int idEditorial, int idCategoria) {
         this.idLibro = idLibro;
+        this.fotoLibro = fotoLibro;
         this.tituloLibro = tituloLibro;
         this.descripcionLibro = descripcionLibro;
         this.fechaDePublicacion = fechaDePublicacion;
         this.idiomaLibro = idiomaLibro;
         this.costoLibro = costoLibro;
+        this.tipoLibro = tipoLibro;
         this.stockLibro = stockLibro;
-        this.idTipoLibro = idTipoLibro;
         this.idAutor = idAutor;
         this.idEditorial = idEditorial;
         this.idCategoria = idCategoria;
@@ -41,6 +46,14 @@ public class Libro {
 
     public void setIdLibro(int idLibro) {
         this.idLibro = idLibro;
+    }
+
+    public InputStream getFotoLibro() {
+        return fotoLibro;
+    }
+
+    public void setFotoLibro(InputStream fotoLibro) {
+        this.fotoLibro = fotoLibro;
     }
 
     public String getTituloLibro() {
@@ -83,20 +96,20 @@ public class Libro {
         this.costoLibro = costoLibro;
     }
 
+    public String getTipoLibro() {
+        return tipoLibro;
+    }
+
+    public void setTipoLibro(String tipoLibro) {
+        this.tipoLibro = tipoLibro;
+    }
+
     public int getStockLibro() {
         return stockLibro;
     }
 
     public void setStockLibro(int stockLibro) {
         this.stockLibro = stockLibro;
-    }
-
-    public int getIdTipoLibro() {
-        return idTipoLibro;
-    }
-
-    public void setIdTipoLibro(int idTipoLibro) {
-        this.idTipoLibro = idTipoLibro;
     }
 
     public int getIdAutor() {
@@ -122,5 +135,7 @@ public class Libro {
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
-
+    
+    
+    
 }

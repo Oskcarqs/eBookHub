@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import java.io.IOException;
@@ -14,15 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import model.Usuario;
 import modelDAO.UsuarioDAO;
 
-/**
- *
- * @author oskca
- */
 public class Validar extends HttpServlet {
 
     UsuarioDAO usuarioDAO = new UsuarioDAO();
     Usuario usuario = new Usuario();
-
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,10 +31,10 @@ public class Validar extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Validar</title>");
+            out.println("<title>Servlet ValidarLogin</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Validar at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ValidarLogin at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,29 +66,30 @@ public class Validar extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         String accion = request.getParameter("accion");
-        if (accion.equalsIgnoreCase("Ingresar")) {
-
-            // capturar el usuario y la contraseña
-            String user = request.getParameter("txtUser");//Captura el usuario del objeto
-            String pass = request.getParameter("txtPass");//Captura la constraseña (DPIEmpleado)
+        if(accion.equalsIgnoreCase("Ingresar")){
+            
+            String user = request.getParameter("txtUser");
+            String pass = request.getParameter("txtPass");
+            
             usuario = usuarioDAO.validar(user, pass);
-
-            if (usuario.getNickNameUsuario() != null) {
-
+            
+            if(usuario.getNickNameUsuario() != null){
+                
                 request.setAttribute("nickNameUsuario", usuario);
-                request.getRequestDispatcher("Validar?menu=Principal").forward(request, response);
-
-            } else {
+                request.getRequestDispatcher("ControladorLogin?menu=Principal").forward(request, response);
+                
+            }else{
                 request.getRequestDispatcher("login.jsp").forward(request, response);
-
             }
-
-        } else {
+            
+        }else{
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
+        
     }
-
+    
     @Override
     public String getServletInfo() {
         return "Short description";

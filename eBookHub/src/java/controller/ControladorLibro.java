@@ -7,25 +7,30 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Empleado;
 import model.Libro;
+import modelDAO.DAOEmpleado;
 import modelDAO.LibroDAO;
 
 /**
  *
- * @author Ottoniel
+ * @author Angels.X
  */
+@MultipartConfig
 public class ControladorLibro extends HttpServlet {
 
     String listar = "view/listarLibro.jsp";
     String add = "view/addLibro.jsp";
     String edit = "view/editarLibro.jsp";
-    Libro nuevoLibro = new Libro();
-    LibroDAO nuevoLibroDAO = new LibroDAO();
+    Libro libro = new Libro();
+    LibroDAO libroDAO = new LibroDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,19 +43,18 @@ public class ControladorLibro extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ControladorLibro</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ControladorLibro at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String accion = request.getParameter("accion");
+        switch (accion) {
+            case "listar":
+                List listaLibro = libroDAO.listarLibro();
+                request.setAttribute("libros", listaLibro);
+                break;
+            case "salir":
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+                break;
         }
+        request.getRequestDispatcher("view/listarLibro.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -65,43 +69,7 @@ public class ControladorLibro extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String acceso = "";
-        String action = request.getParameter("accion");
-        if (action.equalsIgnoreCase("listarLibro")) {
-            acceso = listar;
-        } else if (action.equalsIgnoreCase("addLibro")) {
-            acceso = add;
-        } else if (action.equalsIgnoreCase("AgregarLibro")) {
-            String tituloLibro = request.getParameter("txtTituloLibro");
-            String descripcion = request.getParameter("txtDescripcion");
-            String fecha = request.getParameter("txtFecha");
-            String idioma = request.getParameter("txtIdioma");
-            Double costo = Double.parseDouble(request.getParameter("txtCosto"));
-            int stock = Integer.parseInt(request.getParameter("txtStock"));
-            int idTipoLibro = Integer.parseInt(request.getParameter("txtIdTipoLibro"));
-            int idAutor = Integer.parseInt(request.getParameter("txtAutor"));
-            int idEditorial = Integer.parseInt(request.getParameter("txtEditorial"));
-            int idCategoria = Integer.parseInt(request.getParameter("txtCategoria"));
-            nuevoLibro.setTituloLibro(tituloLibro);
-            nuevoLibro.setDescripcionLibro(descripcion);
-            nuevoLibro.setFechaDePublicacion(fecha);
-            nuevoLibro.setIdiomaLibro(idioma);
-            nuevoLibro.setCostoLibro(costo);
-            nuevoLibro.setStockLibro(stock);
-            nuevoLibro.setIdTipoLibro(idTipoLibro);
-            nuevoLibro.setIdAutor(idAutor);
-            nuevoLibro.setIdEditorial(idEditorial);
-            nuevoLibro.setIdCategoria(idCategoria);
-            nuevoLibroDAO.addLibro(nuevoLibro);
-            acceso = listar;
-        } else if (action.equalsIgnoreCase("editarLibro")) {
-            request.setAttribute("codID", request.getParameter("idLibro"));
-            acceso = edit;
-
-//        } else if () {
-        }
-        RequestDispatcher vista = request.getRequestDispatcher(acceso);
-        vista.forward(request, response);
+        processRequest(request, response);
     }
 
     /**

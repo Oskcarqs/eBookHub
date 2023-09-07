@@ -81,6 +81,19 @@ public class ControladorCategoria extends HttpServlet {
         }else if(action.equalsIgnoreCase("editarCategoria")) {
             request.setAttribute("idCate", request.getParameter("idCategoria"));
             acceso = editarCategoria;
+        }else if(action.equalsIgnoreCase("ActualizarCategoria")) {
+            String idCategoria = request.getParameter("txtIdCategoria");
+            String nombreCategoria = request.getParameter("txtNombreCategoria");
+            String descripcionCategoria = request.getParameter("txtDescripcionCategoria");
+            nuevoCategoria.setIdCategoria(Integer.parseInt(idCategoria));
+            nuevoCategoria.setNombreCategoria(nombreCategoria);
+            nuevoCategoria.setDescripcionCategoria(descripcionCategoria);
+            nuevoCategoriaDAO.editCategoria(nuevoCategoria);
+            acceso = listarCategoria;
+        }else if(action.equalsIgnoreCase("eliminarCategoria")) {
+            Integer IdCategoria = Integer.parseInt(request.getParameter("idCategoria"));
+            nuevoCategoriaDAO.eliminarCategoria(IdCategoria);
+            acceso = listarCategoria;
         }
         
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
