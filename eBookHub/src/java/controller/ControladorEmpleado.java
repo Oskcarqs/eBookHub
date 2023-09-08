@@ -83,6 +83,23 @@ public class ControladorEmpleado extends HttpServlet {
         }else if(action.equalsIgnoreCase("editarEmpleado")){
             request.setAttribute("idEmp", request.getParameter("idEmpleado"));
             acceso = editarEmpleado;
+        }else if(action.equalsIgnoreCase("ActualizarEmpleado")){
+            String idEmpleado = request.getParameter("txtIdEmpleado");
+            String nombreEmpleado = request.getParameter("txtNombreEmpleado");
+            String apellidoEmpleado = request.getParameter("txtApellidoEmpleado");
+            String puestoEmpleado = request.getParameter("txtPuestoEmpleado");
+            String idSucursal = request.getParameter("txtIdSucursal");
+            nuevoEmpleado.setIdEmpleado(Integer.parseInt(idEmpleado));
+            nuevoEmpleado.setNombreEmpleado(nombreEmpleado);
+            nuevoEmpleado.setApellidoEmpleado(apellidoEmpleado);
+            nuevoEmpleado.setPuestoEmpleado(puestoEmpleado);
+            nuevoEmpleado.setIdSucursal(Integer.valueOf(idSucursal));
+            nuevoEmpleadoDAO.edit(nuevoEmpleado);
+            acceso = listarEmpleado;
+        }else if(action.equalsIgnoreCase("eliminarEmpleado")){
+            Integer IdEmpleado = Integer.parseInt(request.getParameter("idEmpleado"));
+            nuevoEmpleadoDAO.eliminar(IdEmpleado);
+            acceso = listarEmpleado;
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);

@@ -7,25 +7,16 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Autor;
-import modelDAO.AutorDAO;
 
 /**
  *
- * @author oskca
+ * @author Kaled Rodriguez
  */
 public class ControladorAutor extends HttpServlet {
-    
-    String listarAutor = "view/listarAutor.jsp";
-    String addAutor = "view/addAutor.jsp";
-    String editarAutor = "view/editarAutor.jsp";
-    Autor nuevoAutor = new Autor();
-    AutorDAO nuevoAutorDAO = new AutorDAO();    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -65,32 +56,7 @@ public class ControladorAutor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String acceso = "";
-        String action = request.getParameter("accion");
-        if (action.equalsIgnoreCase("listarAutor")) {
-            acceso = listarAutor;
-        }else if(action.equalsIgnoreCase("addAutor")){
-            acceso = addAutor;
-        } else if (action.equalsIgnoreCase("AgregarAutor")){
-            String nombreAutor = request.getParameter("txtNombreAutor");
-            String apellidoAutor = request.getParameter("txtApellidoAutor");
-            String nacionalidadAutor = request.getParameter("txtNacionalidadAutor");
-            String fechaNacimientoAutor = request.getParameter("txtFechaNacimientoAutor");
-            String biografiaAutor = request.getParameter("txtBiografiaAutor");
-            nuevoAutor.setNombreAutor(nombreAutor);
-            nuevoAutor.setApellidoAutor(apellidoAutor);
-            nuevoAutor.setNacionalidadAutor(nacionalidadAutor);
-            nuevoAutor.setFechaNacimientoAutor(fechaNacimientoAutor);
-            nuevoAutor.setBiografiaAutor(biografiaAutor);
-            nuevoAutorDAO.addAutor(nuevoAutor);
-            acceso = listarAutor;
-        }else if(action.equalsIgnoreCase("editarAutor")) {
-            request.setAttribute("IdAut", request.getParameter("idAutor"));
-            acceso = editarAutor;
-        }
-        
-        RequestDispatcher vista = request.getRequestDispatcher(acceso);
-        vista.forward(request, response);        
+        processRequest(request, response);
     }
 
     /**
