@@ -1,0 +1,14 @@
+SMAP
+listarLibro_jsp.java
+JSP
+*S JSP
+*F
++ 0 listarLibro.jsp
+view/listarLibro.jsp
+*L
+5,31:54
+35:111,11
+36:122,3
+37:125
+37,6:87
+*E
