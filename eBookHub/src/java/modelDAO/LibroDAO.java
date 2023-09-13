@@ -3,8 +3,10 @@ package modelDAO;
 import config.Conexion;
 import interfaces.CRUDLibro;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import model.Libro;
@@ -24,7 +26,7 @@ public class LibroDAO implements CRUDLibro {
     @Override
     public List listarLibro() {
         ArrayList<Libro> listaLibro = new ArrayList<>();
-        String sql = "select * from Libro";
+        String sql = "select * from Libro"; 
         try {
             con = connect.getConnection();
             ps = con.prepareStatement(sql);
@@ -32,9 +34,10 @@ public class LibroDAO implements CRUDLibro {
             while (rs.next()) {
                 Libro nuevoLibro = new Libro();
                 nuevoLibro.setIdLibro(rs.getInt("idLibro"));
+                nuevoLibro.setFotoLibro(rs.getBinaryStream("fotoLibro"));
                 nuevoLibro.setTituloLibro(rs.getString("tituloLibro"));
                 nuevoLibro.setDescripcionLibro(rs.getString("descripcionLibro"));
-                nuevoLibro.setFechaDePublicacion(rs.getString("fechaDePublicacion"));
+                nuevoLibro.setFechaDePublicacion(rs.getDate("fechaDePublicacion").toLocalDate());
                 nuevoLibro.setIdiomaLibro(rs.getString("idiomaLibro"));
                 nuevoLibro.setCostoLibro(rs.getDouble("costoLibro"));
                 nuevoLibro.setStockLibro(rs.getInt("stockLibro"));
@@ -59,9 +62,10 @@ public class LibroDAO implements CRUDLibro {
             rs = ps.executeQuery();
             while (rs.next()) {
                 libro.setIdLibro(rs.getInt("idLibro"));
+                libro.setFotoLibro(rs.getBinaryStream("fotoLibro"));
                 libro.setTituloLibro(rs.getString("tituloLibro"));
                 libro.setDescripcionLibro(rs.getString("descripcionLibro"));
-                libro.setFechaDePublicacion(rs.getString("fechaDePublicacion"));
+                libro.setFechaDePublicacion(rs.getDate("fechaDePublicacion").toLocalDate());
                 libro.setIdiomaLibro(rs.getString("idiomaLibro"));
                 libro.setCostoLibro(rs.getDouble("costoLibro"));
                 libro.setStockLibro(rs.getInt("stockLibro"));
@@ -78,21 +82,21 @@ public class LibroDAO implements CRUDLibro {
 
     @Override
     public boolean addLibro(Libro l) {
-        String sql = "insert into Libro (tituloLibro, descripcionLibro, fechaDePublicacion, idiomaLibro, costoLibro, stockLibro, "
-                + "idTipoLibro, idAutor, idEditorial, idCategoria) values('"
-                + l.getTituloLibro() + "','"
-                + l.getDescripcionLibro() + "','"
-                + l.getFechaDePublicacion() + "','"
-                + l.getIdiomaLibro() + "','"
-                + l.getCostoLibro() + "','"
-                + l.getStockLibro() + "','"
-                + l.getIdTipoLibro() + "','"
-                + l.getIdAutor() + "','"
-                + l.getIdEditorial() + "','"
-                + l.getIdCategoria() + "')";
+        String sql = "insert into Libro(fotoLibro, tituloLibro, descripcionLibro, fechaDePublicacion, idiomaLibro, costoLibro, stockLibro, idTipoLibro, idAutor, idEditorial, idCategoria)values(?,?,?,?,?,?,?,?,?,?,?)";
         try {
             con = connect.getConnection();
             ps = con.prepareStatement(sql);
+            ps.setBlob(1, l.getFotoLibro());
+            ps.setString(2, l.getTituloLibro());
+            ps.setString(3, l.getDescripcionLibro());
+            ps.setDate(4, Date.valueOf(l.getFechaDePublicacion()));
+            ps.setString(5, l.getIdiomaLibro());
+            ps.setDouble(6, l.getCostoLibro());
+            ps.setInt(7, l.getStockLibro());
+            ps.setInt(8, l.getIdTipoLibro());
+            ps.setInt(9, l.getIdAutor());
+            ps.setInt(10, l.getIdEditorial());
+            ps.setInt(11, l.getIdCategoria());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

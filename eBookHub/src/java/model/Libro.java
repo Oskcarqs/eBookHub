@@ -1,5 +1,8 @@
 package model;
 
+import java.io.InputStream;
+import java.time.LocalDate;
+
 /**
  *
  * @author Ottoniel
@@ -7,9 +10,10 @@ package model;
 public class Libro {
 
     private int idLibro;
+    private InputStream fotoLibro;
     private String tituloLibro;
     private String descripcionLibro;
-    private String fechaDePublicacion;
+    private LocalDate fechaDePublicacion;
     private String idiomaLibro;
     private double costoLibro;
     private int stockLibro;
@@ -21,8 +25,9 @@ public class Libro {
     public Libro() {
     }
 
-    public Libro(int idLibro, String tituloLibro, String descripcionLibro, String fechaDePublicacion, String idiomaLibro, double costoLibro, int stockLibro, int idTipoLibro, int idAutor, int idEditorial, int idCategoria) {
+    public Libro(int idLibro, InputStream fotoLibro, String tituloLibro, String descripcionLibro, LocalDate fechaDePublicacion, String idiomaLibro, double costoLibro, int stockLibro, int idTipoLibro, int idAutor, int idEditorial, int idCategoria) {
         this.idLibro = idLibro;
+        this.fotoLibro = fotoLibro;
         this.tituloLibro = tituloLibro;
         this.descripcionLibro = descripcionLibro;
         this.fechaDePublicacion = fechaDePublicacion;
@@ -43,6 +48,14 @@ public class Libro {
         this.idLibro = idLibro;
     }
 
+    public InputStream getFotoLibro() {
+        return fotoLibro;
+    }
+
+    public void setFotoLibro(InputStream fotoLibro) {
+        this.fotoLibro = fotoLibro;
+    }
+
     public String getTituloLibro() {
         return tituloLibro;
     }
@@ -59,11 +72,11 @@ public class Libro {
         this.descripcionLibro = descripcionLibro;
     }
 
-    public String getFechaDePublicacion() {
+    public LocalDate getFechaDePublicacion() {
         return fechaDePublicacion;
     }
 
-    public void setFechaDePublicacion(String fechaDePublicacion) {
+    public void setFechaDePublicacion(LocalDate fechaDePublicacion) {
         this.fechaDePublicacion = fechaDePublicacion;
     }
 
@@ -122,5 +135,5 @@ public class Libro {
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
-
+    
 }

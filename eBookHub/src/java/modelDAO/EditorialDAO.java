@@ -10,13 +10,13 @@ import java.util.List;
 import model.Editorial;
 
 public class EditorialDAO implements CRUDEditorial {
-    
+
     Conexion conect = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     Editorial nEditorial = new Editorial();
-    
+
     @Override
     public List listar() {
         ArrayList<Editorial> listaEditorial = new ArrayList<>();
@@ -39,8 +39,8 @@ public class EditorialDAO implements CRUDEditorial {
         }
 
         return listaEditorial;
-    } 
-    
+    }
+
     @Override
     public Editorial listEditorial(int id) {
         String sql = "Select * from editorial where idEditorial = " + id;
@@ -64,10 +64,12 @@ public class EditorialDAO implements CRUDEditorial {
 
     @Override
     public boolean addEditorial(Editorial edi) {
-        String sql = "insert into editorial(nombreEditorial, descripcionEditorial) values('"+ edi.getNombreEditorial()+ "','" + edi.getDescripcionEditorial()+ "')";
+        String sql = "insert into editorial(nombreEditorial, descripcionEditorial) values(?,?)";
         try {
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
+            ps.setString(1, edi.getNombreEditorial());
+            ps.setString(2, edi.getDescripcionEditorial());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,21 +79,21 @@ public class EditorialDAO implements CRUDEditorial {
 
     @Override
     public boolean editEditorial(Editorial edi) {
-        String sql = "update editorial set nombreEditorial = '" + edi.getNombreEditorial()+ "', descripcionEditorial = '" + edi.getDescripcionEditorial()+ "' where idEditorial = " + edi.getIdEditorial();
+        String sql = "update editorial set nombreEditorial = '" + edi.getNombreEditorial() + "', descripcionEditorial = '" + edi.getDescripcionEditorial() + "' where idEditorial = " + edi.getIdEditorial();
         try {
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
-            ps.executeUpdate();        
+            ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return false;
     }
 
     @Override
     public boolean eliminarEditorial(int id) {
-       String sql = "delete from editorial where idEditorial";
+        String sql = "delete from editorial where idEditorial";
         try {
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
@@ -99,8 +101,8 @@ public class EditorialDAO implements CRUDEditorial {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        return false; 
+
+        return false;
     }
- 
+
 }

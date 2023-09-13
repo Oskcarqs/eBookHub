@@ -8,18 +8,18 @@ public class Factura {
     private String horaEmision;
     private Double totalFactura;
     private int idSucursal;
-    private int idUsuario;
+    private int idCliente;
 
     public Factura() {
     }
 
-    public Factura(int idFactura, String fechaEmision, String horaEmision, Double totalFactura, int idSucursal, int idUsuario) {
+    public Factura(int idFactura, String fechaEmision, String horaEmision, Double totalFactura, int idSucursal, int idCliente) {
         this.idFactura = idFactura;
         this.fechaEmision = fechaEmision;
         this.horaEmision = horaEmision;
         this.totalFactura = totalFactura;
         this.idSucursal = idSucursal;
-        this.idUsuario = idUsuario;
+        this.idCliente = idCliente;
     }
 
     public int getIdFactura() {
@@ -62,13 +62,15 @@ public class Factura {
         this.idSucursal = idSucursal;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
+
+    
     
     
 }

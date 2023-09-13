@@ -87,11 +87,16 @@ public class DAOCliente implements CRUDCliente{
 
     @Override
     public boolean edit(Cliente c) {
-        String sql = "update Cliente set nombreCliente= '"+c.getNombreCliente()+"',apellidoCliente'"+ c.getApellidoCliente()+"',fechaDeNacimientoCliente'" 
-                + c.getFechaDeNacimientoCliente() +"',direccionCliente'"+ c.getDireccionCliente()+"',telefonoCliente'" + c.getTelefonoCliente()+"' where idCliente= "+ c.getIdCliente();
+        
         try {
             con = conect.getConnection();
-            ps = con.prepareStatement(sql);
+            PreparedStatement ps = con.prepareCall("call sp_EditarCliente(?,?,?,?,?,?)");
+            ps.setInt(1, c.getIdCliente());
+            ps.setString(2, c.getNombreCliente());
+            ps.setString(3, c.getApellidoCliente());
+            ps.setDate(4, c.getFechaDeNacimientoCliente());
+            ps.setString(5, c.getDireccionCliente());
+            ps.setString(6, c.getTelefonoCliente());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

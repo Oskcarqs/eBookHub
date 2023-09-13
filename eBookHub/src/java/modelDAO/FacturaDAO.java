@@ -2,7 +2,6 @@
 package modelDAO;
 
 import config.Conexion;
-import interfaces.CRUDFactura;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,14 +10,14 @@ import java.util.List;
 import model.Factura;
 
 
-public class FacturaDAO implements CRUDFactura{
+public class FacturaDAO {
     Conexion conect = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     Factura nFactura = new Factura();
 
-    @Override
+    
     public List listar() {
         ArrayList<Factura> listaFactura = new ArrayList<>();
         String sql = "Select * from Factura";
@@ -33,7 +32,7 @@ public class FacturaDAO implements CRUDFactura{
                 nuevaFactura.setHoraEmision(rs.getString("horaEmision"));
                 nuevaFactura.setTotalFactura(rs.getDouble("totalFactura"));
                 nuevaFactura.setIdSucursal(rs.getInt("idSucursal"));
-                nuevaFactura.setIdUsuario(rs.getInt("idUsuario"));
+                nuevaFactura.setIdCliente(rs.getInt("idCliente"));
                 listaFactura.add(nuevaFactura);
             }
         }catch(Exception e){
@@ -42,7 +41,7 @@ public class FacturaDAO implements CRUDFactura{
         return listaFactura;
     }
 
-    @Override
+    
     public Factura list(int id) {
         String sql = "Select * from Factura where idFactura="+ id;
         try {
@@ -55,7 +54,7 @@ public class FacturaDAO implements CRUDFactura{
                 nFactura.setHoraEmision(rs.getString("horaEmision"));
                 nFactura.setTotalFactura(rs.getDouble("totalFactura"));
                 nFactura.setIdSucursal(rs.getInt("idSucursal"));
-                nFactura.setIdUsuario(rs.getInt("idUsuario"));
+                nFactura.setIdCliente(rs.getInt("idCliente"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,11 +62,11 @@ public class FacturaDAO implements CRUDFactura{
         return nFactura;
     }
 
-    @Override
+    
     public boolean add(Factura facto) {
         /*Insert into Factura (idFactura, fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario)
 				values (idFactura, fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario);*/
-        String sql = "Insert into Factura (fechaEmision, horaEmision, totalFactura, idSucursal, idUsuario) values('"+facto.getFechaEmision()+"','"+facto.getHoraEmision()+"','"+facto.getTotalFactura()+"','"+facto.getIdSucursal()+"','"+facto.getIdUsuario()+"')" ;
+        String sql = "Insert into Factura (fechaEmision, horaEmision, totalFactura, idSucursal, idCliente) values('"+facto.getFechaEmision()+"','"+facto.getHoraEmision()+"','"+facto.getTotalFactura()+"','"+facto.getIdSucursal()+"','"+facto.getIdCliente()+"')" ;
         try{
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
@@ -79,9 +78,9 @@ public class FacturaDAO implements CRUDFactura{
         return false;
     }
 
-    @Override
+    
     public boolean edit(Factura facto) {
-        String sql = "update Factura set fechaEmision = '"+facto.getFechaEmision()+"',horaEmision = '"+facto.getHoraEmision()+"',totalFactura= '"+facto.getTotalFactura()+"',idSucursal= '"+facto.getIdSucursal() + "', idUsuario= '"+facto.getIdUsuario()+"' where idSucursal= "+ facto.getIdFactura();
+        String sql = "update Factura set fechaEmision = '"+facto.getFechaEmision()+"',horaEmision = '"+facto.getHoraEmision()+"',totalFactura= '"+facto.getTotalFactura()+"',idSucursal= '"+facto.getIdSucursal() + "', idCliente= '"+facto.getIdCliente()+"' where idFactura= "+ facto.getIdFactura();
         try{
             con = conect.getConnection();
             ps = con.prepareStatement(sql);
@@ -94,7 +93,7 @@ public class FacturaDAO implements CRUDFactura{
         return false;
     }
 
-    @Override
+    
     public boolean eliminar(int id) {
         String sql = "delete from Factura where idFactura="+ id;
         try{
