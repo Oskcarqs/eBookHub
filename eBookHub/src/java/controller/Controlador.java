@@ -96,7 +96,7 @@ public class Controlador extends HttpServlet {
                 case "Eliminar":
                     codEditorial = Integer.parseInt(request.getParameter("codigoEditorial"));
                     editorialDAO.eliminarEditorial(codEditorial);
-                    request.getRequestDispatcher("Controlador?menu=Editorial&accion=listar");
+                    response.sendRedirect("Controlador?menu=Editorial&accion=Listar");
                     break;
                 case "Cancelar":
                     response.sendRedirect("Controlador?menu=Editorial&accion=Listar");
